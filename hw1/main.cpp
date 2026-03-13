@@ -164,6 +164,7 @@ int main(){
     unsigned int Nsd = 3; //number of spatial dimensions - 3D problem
     constexpr int Nne = 8; //number of nodes per element - 8-node hexahedral element
     unsigned int quadRule = 2; //number of quadrature points in each direction for numerical integration
+    double epsilon = 1e-8; //Newton Raphson solver tolerance
 
     //problem variables
     float lambda = 6*1e10; //first Lamé parameter
@@ -298,8 +299,12 @@ int main(){
     Eigen::VectorXf quad_points = Eigen::Map<Eigen::VectorXf>(points.data(), points.size());
     Eigen::VectorXf quad_weights = Eigen::Map<Eigen::VectorXf>(weights.data(), weights.size());
 
+    //Boundary Conditions
+
     for(unsigned int increment = 0; increment < maxIncrement; increment++){
-        //
+        //Apply dirischlet BCs
+
+
         for(unsigned int iter = 0; iter < maxIter; iter++){
             Eigen::VectorXf Rglobal = Eigen::VectorXf::Zero(Nt * Nsd); //residual vector initialized to zero
             Eigen::MatrixXf Kglobal = Eigen::MatrixXf::Zero(Nt * Nsd, Nt * Nsd); //tangent stiffness matrix initialized to zero
@@ -336,18 +341,61 @@ int main(){
                             Eigen::MatrixXf S = 2*mu*E + lambda*E.trace()*Eigen::MatrixXf::Identity(3,3); //second Piola-Kirchhoff stress using St. Venant-Kirchhoff model
                             Eigen::MatrixXf P = F * S; //first Piola-Kirchhoff stress
 
-                            for(int B = 0 ; B < Nne ; B++){
+                            for(int B = 0 ; B < Nne ; B++){//Loop to calculate Residual
                                 auto [dN_dxi1, dN_dxi2, dN_dxi3] = basis_gradient(B, xi1, xi2, xi3);
                                 Eigen::VectorXf dN_dx = JacInv.transpose()*Eigen::Vector3f(dN_dxi1, dN_dxi2, dN_dxi3); //gradient of the basis function in global coordinates
                                 Rlocal.segment(B*Nsd, Nsd) += P * dN_dx * weight * JacDet; //contribution to the local residual vector
+                            }
+                            
+                            for(int A = 0 ; A < Nne ; A++){//Loops to calculate tangent matrix
+                                for(int B = 0 ; B < Nne ; B++){
 
-                                //Compute contribution to the local tangent stiffness matrix
+                                    auto [dNA_dxi1, dNA_dxi2, dNA_dxi3] = basis_gradient(A, xi1, xi2, xi3);
+                                    auto [dNB_dxi1, dNB_dxi2, dNB_dxi3] = basis_gradient(B, xi1, xi2, xi3);
 
+                                    Eigen::VectorXf dNA_dx = JacInv.transpose()*Eigen::Vector3f(dNA_dxi1, dNA_dxi2, dNA_dxi3);
+                                    Eigen::VectorXf dNB_dx = JacInv.transpose()*Eigen::Vector3f(dNB_dxi1, dNB_dxi2, dNB_dxi3);
+
+                                    //Kgeometric
+                                    float Kgeo_scalar = (dNA_dx.transpose() * S * dNB_dx)(0,0);
+                                    Eigen::MatrixXf KgeoAB =  Kgeo_scalar * JacDet * weight * Eigen::MatrixXf::Identity(3,3);
+                                    Klocal.block<3,3>(3*A,3*B) += KgeoAB;
+
+                                    //Kmaterial
+                                    Eigen::MatrixXf FA = F.transpose()*dNA_dx;
+                                    Eigen::MatrixXf FB = F.transpose()*dNB_dx;
+
+                                    Eigen::MatrixXf KmatAB = (lambda + mu)*FA*FB.transpose() + mu*(F * dNA_dx.cwiseProduct(dNB_dx).asDiagonal() * F.transpose()) * JacDet * weight;
+                                    Klocal.block<3,3>(3*A,3*B) += KmatAB;
+
+                                }
                             }
                         }
                     }
                 }
+
+                //Assemble Rlocal and Klocal into Rglobal and Kglobal
+                for(int A = 0; A < Nne; A++){
+                    int Aglobal = elements[e].node[A];
+                    for(int B = 0; B < Nne ; B++)
+                    {
+                        int Bglobal = elements[e].node[B];
+                        Kglobal.block<3,3>(3*Aglobal,3*Bglobal) += Klocal.block<3,3>(3*A,3*B);
+                    }
+                    Rglobal.segment(3*Aglobal,3) += Rlocal.segment(3*A,3);
+                }
             }
+
+            Eigen::LDLT<Eigen::MatrixXf> solver(Kglobal);
+            du = solver.solve(Rglobal);
+            if(du.norm() < epsilon*u.norm()){ 
+                break;
+            }
+            else{
+                u += du;
+            }
+            
         }
+
     }
 }   
