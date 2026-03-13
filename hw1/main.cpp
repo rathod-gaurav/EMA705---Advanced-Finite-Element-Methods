@@ -5,11 +5,12 @@
 #include <cmath>
 #include <fstream>
 #include <Eigen/Dense>
+#include <map>
 
 using namespace std;
 
 struct Node {
-    float x1, x2, x3; //global coordinates of the node
+    double x1, x2, x3; //global coordinates of the node
 };
 
 template <unsigned int Nne>
@@ -17,8 +18,8 @@ struct Element {
     unsigned int node[Nne]; //IDs of the nodes that form the element
 };
 
-std::tuple<float,float,float> xi_at_node(unsigned int node){ //function to return xi1, xi2, and xi3 for given node A
-        float xi1, xi2, xi3;
+std::tuple<double,double,double> xi_at_node(unsigned int node){ //function to return xi1, xi2, and xi3 for given node A
+        double xi1, xi2, xi3;
         switch(node){
             case 0:
                 xi1 = -1.0;
@@ -66,15 +67,15 @@ std::tuple<float,float,float> xi_at_node(unsigned int node){ //function to retur
         return {xi1, xi2, xi3};
 };
 
-float basis_function(unsigned int node, float xi1, float xi2, float xi3){
+double basis_function(unsigned int node, double xi1, double xi2, double xi3){
         auto [xi1_node , xi2_node , xi3_node] = xi_at_node(node);
-        float value = 0.125*(1 + xi1*xi1_node)*(1 + xi2*xi2_node)*(1 + xi3*xi3_node);
+        double value = 0.125*(1 + xi1*xi1_node)*(1 + xi2*xi2_node)*(1 + xi3*xi3_node);
         return value;
 };
 
-std::tuple<float,float,float> basis_gradient(unsigned int node, float xi1, float xi2, float xi3){
+std::tuple<double,double,double> basis_gradient(unsigned int node, double xi1, double xi2, double xi3){
     auto [xi1_node,xi2_node,xi3_node] = xi_at_node(node);
-    float basis_gradient_xi1, basis_gradient_xi2, basis_gradient_xi3;
+    double basis_gradient_xi1, basis_gradient_xi2, basis_gradient_xi3;
     basis_gradient_xi1 = 0.125*xi1_node*(1 + xi2*xi2_node)*(1 + xi3*xi3_node);
     basis_gradient_xi2 = 0.125*xi2_node*(1 + xi1*xi1_node)*(1 + xi3*xi3_node);
     basis_gradient_xi3 = 0.125*xi3_node*(1 + xi1*xi1_node)*(1 + xi2*xi2_node);
@@ -82,8 +83,8 @@ std::tuple<float,float,float> basis_gradient(unsigned int node, float xi1, float
 }
 
 struct QuadratureRule {
-    std::vector<float> points;
-    std::vector<float> weights;
+    std::vector<double> points;
+    std::vector<double> weights;
 };
 
 QuadratureRule gauss_legendre(unsigned int n) {
@@ -138,12 +139,12 @@ QuadratureRule gauss_legendre(unsigned int n) {
 }
 
 template <unsigned int Nne>
-Eigen::MatrixXf compute_grad_u(Eigen::VectorXf u_e, float xi1, float xi2, float xi3, Eigen::MatrixXf JacInv){
-    Eigen::MatrixXf grad_u = Eigen::MatrixXf::Zero(3,3);
+Eigen::MatrixXd compute_grad_u(Eigen::VectorXd u_e, double xi1, double xi2, double xi3, Eigen::MatrixXd JacInv){
+    Eigen::MatrixXd grad_u = Eigen::MatrixXd::Zero(3,3);
     //compute the gradient of the displacement field at the quadrature point using the basis function gradients and the nodal displacements
     for(int A = 0 ; A < Nne ; A++){
         auto [dN_dxi1, dN_dxi2, dN_dxi3] = basis_gradient(A, xi1, xi2, xi3);
-        Eigen::VectorXf dN_dx = JacInv.transpose()*Eigen::Vector3f(dN_dxi1, dN_dxi2, dN_dxi3);
+        Eigen::VectorXd dN_dx = JacInv.transpose()*Eigen::Vector3d(dN_dxi1, dN_dxi2, dN_dxi3);
         grad_u(0,0) += dN_dx[0] * u_e(A*3 + 0); //du1/dx1
         grad_u(0,1) += dN_dx[1] * u_e(A*3 + 0); //du1/dx2
         grad_u(0,2) += dN_dx[2] * u_e(A*3 + 0); //du1/dx3
@@ -159,37 +160,83 @@ Eigen::MatrixXf compute_grad_u(Eigen::VectorXf u_e, float xi1, float xi2, float 
     return grad_u;
 }
 
+Eigen::MatrixXd extractSubmatrix(const Eigen::MatrixXd& OriginalMatrix , const vector<int> rows , const vector<int> cols){//extract submatrix from original matrix given row and column indexes
+    Eigen::MatrixXd subMatrix(rows.size(), cols.size());
+
+    for(int i = 0 ; i < rows.size() ; i++){
+        for(int j = 0 ; j < cols.size() ; j++){
+            subMatrix(i,j) = OriginalMatrix(rows[i],cols[j]);
+        }
+    }
+    return subMatrix;
+}
+
+#include <sstream>
+#include <curl/curl.h>
+void sendResidual(int incr, int iter, double residual)
+{
+    CURL *curl = curl_easy_init();
+
+    if(curl)
+    {
+        std::stringstream json;
+
+        json << "{";
+        json << "\"increment\": " << incr << ",";
+        json << "\"iteration\": " << iter << ",";
+        json << "\"residual\": " << residual;
+        json << "}";
+
+        std::string jsonStr = json.str();
+
+        struct curl_slist *headers = NULL;
+        headers = curl_slist_append(headers, "Content-Type: application/json");
+
+        curl_easy_setopt(curl, CURLOPT_URL, "http://127.0.0.1:8000/residual");
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonStr.c_str());
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
+        curl_easy_perform(curl);
+
+        curl_easy_cleanup(curl);
+    }
+}
+
 
 int main(){
     unsigned int Nsd = 3; //number of spatial dimensions - 3D problem
     constexpr int Nne = 8; //number of nodes per element - 8-node hexahedral element
-    unsigned int quadRule = 2; //number of quadrature points in each direction for numerical integration
-    double epsilon = 1e-8; //Newton Raphson solver tolerance
+    unsigned int quadRule = 3; //number of quadrature points in each direction for numerical integration
+    double epsilon = 1e-6; //Newton Raphson solver tolerance
+
+    //Setup Newton-Raphson increment and iteration parameters
+    unsigned int maxIncrement = 10; //maximum number of load increments
+    unsigned int maxIter = 100; //maximum number of iterations per increment
 
     //problem variables
-    float lambda = 6*1e10; //first Lamé parameter
-    float mu = 2*1e10; //second Lamé parameter (shear modulus)
+    double lambda = 6*1e10; //first Lamé parameter
+    double mu = 2*1e10; //second Lamé parameter (shear modulus)
 
     //domain
-    float x1_ll = 0.0;
-    float x1_ul = 10.0;
-    float x2_ll = 0.0;
-    float x2_ul = 3.0;
-    float x3_ll = 0.0;
-    float x3_ul = 3.0;
+    double x1_ll = 0.0;
+    double x1_ul = 0.1;
+    double x2_ll = 0.0;
+    double x2_ul = 0.03;
+    double x3_ll = 0.0;
+    double x3_ul = 0.03;
 
     //Mesh
-    unsigned int Nel_x1 = 4; //number of elements in x1 direction
-    unsigned int Nel_x2 = 2; //number of elements in x2 direction
-    unsigned int Nel_x3 = 2; //number of elements in x3 direction
+    unsigned int Nel_x1 = 10; //number of elements in x1 direction
+    unsigned int Nel_x2 = 3; //number of elements in x2 direction
+    unsigned int Nel_x3 = 3; //number of elements in x3 direction
 
     unsigned int Nnodes_x1 = Nel_x1 + 1; //number of nodes in x1 direction
     unsigned int Nnodes_x2 = Nel_x2 + 1; //number of nodes in x2 direction
     unsigned int Nnodes_x3 = Nel_x3 + 1; //number of nodes in x3 direction
 
-    float dx1 = (x1_ul - x1_ll) / Nel_x1; //element size in x1 direction
-    float dx2 = (x2_ul - x2_ll) / Nel_x2; //element size in x2 direction
-    float dx3 = (x3_ul - x3_ll) / Nel_x3; //element size in x3 direction
+    double dx1 = (x1_ul - x1_ll) / Nel_x1; //element size in x1 direction
+    double dx2 = (x2_ul - x2_ll) / Nel_x2; //element size in x2 direction
+    double dx3 = (x3_ul - x3_ll) / Nel_x3; //element size in x3 direction
 
     unsigned int Nel_t = Nel_x1 * Nel_x2 * Nel_x3; //total number of elements
     unsigned int Nt = Nnodes_x1 * Nnodes_x2 * Nnodes_x3; //total number of nodes
@@ -265,15 +312,12 @@ int main(){
     }
 
     // Initialize the solution vector (displacements at each node)
-    Eigen::VectorXf u = Eigen::VectorXf::Zero(Nt * Nsd); //displacement vector initialized to zero
-    Eigen::VectorXf du = Eigen::VectorXf::Zero(Nt * Nsd); //incremental displacement vector initialized to zero
+    Eigen::VectorXd u = Eigen::VectorXd::Zero(Nt * Nsd); //displacement vector initialized to zero
+    Eigen::VectorXd du = Eigen::VectorXd::Zero(Nt * Nsd); //incremental displacement vector initialized to zero
 
-    //Setup Newton-Raphson increment and iteration parameters
-    unsigned int maxIncrement = 10; //maximum number of load increments
-    unsigned int maxIter = 20; //maximum number of iterations per increment
 
-    auto calculate_Jacobian_3D = [Nsd, elements, nodes](int e, float xi1, float xi2, float xi3){//function to calculate jacobian
-        Eigen::MatrixXf J = Eigen::MatrixXf::Zero(Nsd,Nsd);
+    auto calculate_Jacobian_3D = [Nsd, elements, nodes](int e, double xi1, double xi2, double xi3){//function to calculate jacobian
+        Eigen::MatrixXd J = Eigen::MatrixXd::Zero(Nsd,Nsd);
         
         for(int A = 0 ; A < Nne ; A++){
             auto [basis_gradient_xi1, basis_gradient_xi2, basis_gradient_xi3] = basis_gradient(A, xi1, xi2, xi3);
@@ -293,29 +337,89 @@ int main(){
 
     //Quadrature points
     QuadratureRule q = gauss_legendre(quadRule);
-    std::vector<float> points(quadRule), weights(quadRule);
+    std::vector<double> points(quadRule), weights(quadRule);
     points = q.points;
     weights = q.weights;
-    Eigen::VectorXf quad_points = Eigen::Map<Eigen::VectorXf>(points.data(), points.size());
-    Eigen::VectorXf quad_weights = Eigen::Map<Eigen::VectorXf>(weights.data(), weights.size());
+    Eigen::VectorXd quad_points = Eigen::Map<Eigen::VectorXd>(points.data(), points.size());
+    Eigen::VectorXd quad_weights = Eigen::Map<Eigen::VectorXd>(weights.data(), weights.size());
 
     //Boundary Conditions
+    //global nodeLocations where dirischlet boundary conditions are specified
+    std::map<int, std::vector<int>> nodeLocationsD_map;
+    for(int i = 0 ; i < Nt ; i++){
+        if(nodes[i].x1 == x1_ll){
+            nodeLocationsD_map[i].push_back(0); // 0 => X1 displacement specified on this node
+            nodeLocationsD_map[i].push_back(1); // 1 => X2 displacement specified on this node
+            nodeLocationsD_map[i].push_back(2); // 2 => X3 displacement specified on this node
+        }
+        if(nodes[i].x1 == x1_ul){
+            nodeLocationsD_map[i].push_back(0); // 0 => X1 displacement specified on this node
+        }
+    }
+    vector<bool> isDirischlet(Nt,false);
+    for(const auto& [key,vec] : nodeLocationsD_map){
+        isDirischlet[key] = true;
+    }
 
+    //indexes to remove from solution array corresponding to dirischlet nodes and degrees of freedom
+    vector<int> dirischletIndexes;
+    for(int i = 0 ; i < Nt ; i++){
+        if(isDirischlet[i]){
+            for(int dof : nodeLocationsD_map[i]){
+                dirischletIndexes.push_back(i*Nsd + dof);
+            }
+        }
+    }
+    vector<bool> isDirischletIndex(Nt*Nsd,false);
+    for(int index : dirischletIndexes){
+        isDirischletIndex[index] = true;
+    }
+    vector<int> unknownIndexes;
+    for(int i = 0 ; i < Nt*Nsd ; i++){
+        if(!isDirischletIndex[i]){
+            unknownIndexes.push_back(i);
+        }
+    }
+
+    cout << "Number of unknowns: " << unknownIndexes.size() << "\n";
+    cout << "Number of dirischlet conditions: " << dirischletIndexes.size() << "\n";
+    cout << "Total number of DOFs: " << Nt*Nsd << "\n";
+
+    //given values of displacement field at dirischlet boundary
+    Eigen::VectorXd dirischletVal(dirischletIndexes.size());
+    for(int i = 0 ; i < dirischletIndexes.size() ; i++){
+        int nodeD = dirischletIndexes[i]/3;
+        int dof = dirischletIndexes[i]%3;
+        if(nodes[nodeD].x1 == x1_ll){
+            dirischletVal(i) = 0.0; //displacements at x1 = 0 are fixed to zero
+        }
+        else if(nodes[nodeD].x1 == x1_ul){
+            if(dof == 0){
+                dirischletVal(i) = 0.01; //X1 displacements at x1 = 10 are fixed to 0.01
+            }
+        }
+    }
+    Eigen::VectorXd dirischletValDot = Eigen::VectorXd::Zero(dirischletIndexes.size()); //time derivative of dirischlet values for dynamic problems, initialized to zero for static problem
+
+    cout << "Starting Newton-Raphson Iterations..." << "\n";
     for(unsigned int increment = 0; increment < maxIncrement; increment++){
         //Apply dirischlet BCs
-
+        for(int i = 0 ; i < dirischletIndexes.size() ; i++){
+            u(dirischletIndexes[i]) = ((increment+1)/static_cast<double>(maxIncrement))*dirischletVal(i);
+        }
+        // cout << "Applied Dirischlet BCs for increment " << increment+1 << "\n";
 
         for(unsigned int iter = 0; iter < maxIter; iter++){
-            Eigen::VectorXf Rglobal = Eigen::VectorXf::Zero(Nt * Nsd); //residual vector initialized to zero
-            Eigen::MatrixXf Kglobal = Eigen::MatrixXf::Zero(Nt * Nsd, Nt * Nsd); //tangent stiffness matrix initialized to zero
+            Eigen::VectorXd Rglobal = Eigen::VectorXd::Zero(Nt * Nsd); //residual vector initialized to zero
+            Eigen::MatrixXd Kglobal = Eigen::MatrixXd::Zero(Nt * Nsd, Nt * Nsd); //tangent stiffness matrix initialized to zero
             //Loop over elements to compute element-level contributions to R and K
             for(unsigned int e = 0; e < Nel_t; e++){
                 //Get the nodes of the current element`
-                Eigen::VectorXf Rlocal = Eigen::VectorXf::Zero(Nne * Nsd); //local residual vector for the element
-                Eigen::MatrixXf Klocal = Eigen::MatrixXf::Zero(Nne * Nsd, Nne * Nsd); //local tangent stiffness matrix for the element
+                Eigen::VectorXd Rlocal = Eigen::VectorXd::Zero(Nne * Nsd); //local residual vector for the element
+                Eigen::MatrixXd Klocal = Eigen::MatrixXd::Zero(Nne * Nsd, Nne * Nsd); //local tangent stiffness matrix for the element
                 
                 //Element nodal displacements
-                Eigen::VectorXf u_e = Eigen::VectorXf::Zero(Nne * Nsd); //displacement vector for the current element
+                Eigen::VectorXd u_e = Eigen::VectorXd::Zero(Nne * Nsd); //displacement vector for the current element
                 for(unsigned int i = 0; i < Nne; i++){
                     unsigned int global_node_id = elements[e].node[i];
                     u_e.segment(i*Nsd, Nsd) = u.segment(global_node_id*Nsd, Nsd); //extract the displacements for the nodes of the current element 
@@ -326,24 +430,24 @@ int main(){
                     for(int J = 0 ; J < quadRule ; J++){
                         for(int K = 0 ; K < quadRule ; K++){
                             //Get the quadrature point coordinates and weights
-                            float xi1 = quad_points[I]; 
-                            float xi2 = quad_points[J];
-                            float xi3 = quad_points[K];
-                            float weight = quad_weights[I] * quad_weights[J] * quad_weights[K];
-                            Eigen::MatrixXf Jac = calculate_Jacobian_3D(e, xi1, xi2, xi3); //compute the Jacobian matrix at the quadrature point
-                            float JacDet = Jac.determinant(); //compute the determinant of the Jacobian
-                            Eigen::MatrixXf JacInv = Jac.inverse(); //compute the inverse of the Jacobian
+                            double xi1 = quad_points[I]; 
+                            double xi2 = quad_points[J];
+                            double xi3 = quad_points[K];
+                            double weight = quad_weights[I] * quad_weights[J] * quad_weights[K];
+                            Eigen::MatrixXd Jac = calculate_Jacobian_3D(e, xi1, xi2, xi3); //compute the Jacobian matrix at the quadrature point
+                            double JacDet = Jac.determinant(); //compute the determinant of the Jacobian
+                            Eigen::MatrixXd JacInv = Jac.inverse(); //compute the inverse of the Jacobian
 
-                            Eigen::MatrixXf grad_u = compute_grad_u<Nne>(u_e, xi1, xi2, xi3, JacInv); //compute the gradient of the displacement field at the quadrature point
+                            Eigen::MatrixXd grad_u = compute_grad_u<Nne>(u_e, xi1, xi2, xi3, JacInv); //compute the gradient of the displacement field at the quadrature point
                             //Compute the deformation gradient F, Green-Lagrange strain E, and the second Piola-Kirchhoff stress S at the quadrature point
-                            Eigen::MatrixXf F = Eigen::MatrixXf::Identity(3,3) + grad_u; //deformation gradient
-                            Eigen::MatrixXf E = 0.5 * (F.transpose() * F - Eigen::MatrixXf::Identity(3,3)); //Green-Lagrange strain
-                            Eigen::MatrixXf S = 2*mu*E + lambda*E.trace()*Eigen::MatrixXf::Identity(3,3); //second Piola-Kirchhoff stress using St. Venant-Kirchhoff model
-                            Eigen::MatrixXf P = F * S; //first Piola-Kirchhoff stress
+                            Eigen::MatrixXd F = Eigen::MatrixXd::Identity(3,3) + grad_u; //deformation gradient
+                            Eigen::MatrixXd E = 0.5 * (F.transpose() * F - Eigen::MatrixXd::Identity(3,3)); //Green-Lagrange strain
+                            Eigen::MatrixXd S = 2*mu*E + lambda*E.trace()*Eigen::MatrixXd::Identity(3,3); //second Piola-Kirchhoff stress using St. Venant-Kirchhoff model
+                            Eigen::MatrixXd P = F * S; //first Piola-Kirchhoff stress
 
                             for(int B = 0 ; B < Nne ; B++){//Loop to calculate Residual
                                 auto [dN_dxi1, dN_dxi2, dN_dxi3] = basis_gradient(B, xi1, xi2, xi3);
-                                Eigen::VectorXf dN_dx = JacInv.transpose()*Eigen::Vector3f(dN_dxi1, dN_dxi2, dN_dxi3); //gradient of the basis function in global coordinates
+                                Eigen::VectorXd dN_dx = JacInv.transpose()*Eigen::Vector3d(dN_dxi1, dN_dxi2, dN_dxi3); //gradient of the basis function in global coordinates
                                 Rlocal.segment(B*Nsd, Nsd) += P * dN_dx * weight * JacDet; //contribution to the local residual vector
                             }
                             
@@ -353,23 +457,49 @@ int main(){
                                     auto [dNA_dxi1, dNA_dxi2, dNA_dxi3] = basis_gradient(A, xi1, xi2, xi3);
                                     auto [dNB_dxi1, dNB_dxi2, dNB_dxi3] = basis_gradient(B, xi1, xi2, xi3);
 
-                                    Eigen::VectorXf dNA_dx = JacInv.transpose()*Eigen::Vector3f(dNA_dxi1, dNA_dxi2, dNA_dxi3);
-                                    Eigen::VectorXf dNB_dx = JacInv.transpose()*Eigen::Vector3f(dNB_dxi1, dNB_dxi2, dNB_dxi3);
+                                    Eigen::VectorXd dNA_dx = JacInv.transpose()*Eigen::Vector3d(dNA_dxi1, dNA_dxi2, dNA_dxi3);
+                                    Eigen::VectorXd dNB_dx = JacInv.transpose()*Eigen::Vector3d(dNB_dxi1, dNB_dxi2, dNB_dxi3);
 
                                     //Kgeometric
-                                    float Kgeo_scalar = (dNA_dx.transpose() * S * dNB_dx)(0,0);
-                                    Eigen::MatrixXf KgeoAB =  Kgeo_scalar * JacDet * weight * Eigen::MatrixXf::Identity(3,3);
+                                    double Kgeo_scalar = (dNA_dx.transpose() * S * dNB_dx)(0,0);
+                                    Eigen::MatrixXd KgeoAB =  Kgeo_scalar * JacDet * weight * Eigen::MatrixXd::Identity(3,3);
                                     Klocal.block<3,3>(3*A,3*B) += KgeoAB;
 
                                     //Kmaterial
-                                    Eigen::MatrixXf FA = F.transpose()*dNA_dx;
-                                    Eigen::MatrixXf FB = F.transpose()*dNB_dx;
+                                    // Eigen::MatrixXd FA = F.transpose()*dNA_dx;
+                                    // Eigen::MatrixXd FB = F.transpose()*dNB_dx;
 
-                                    Eigen::MatrixXf KmatAB = (lambda + mu)*FA*FB.transpose() + mu*(F * dNA_dx.cwiseProduct(dNB_dx).asDiagonal() * F.transpose()) * JacDet * weight;
+                                    // Eigen::MatrixXd KmatAB = ((lambda + mu)*FA*FB.transpose() + mu*(F * dNA_dx.cwiseProduct(dNB_dx).asDiagonal() * F.transpose())) * JacDet * weight;
+                                    // Klocal.block<3,3>(3*A,3*B) += KmatAB;
+
+
+                                    // Correct KmatAB (3x3 block for nodes A,B)
+                                    Eigen::MatrixXd KmatAB = Eigen::MatrixXd::Zero(3,3);
+                                    for(int i = 0; i < 3; i++){
+                                        for(int j = 0; j < 3; j++){
+                                            double val = 0.0;
+                                            for(int K = 0; K < 3; K++){
+                                                for(int L = 0; L < 3; L++){
+                                                    for(int M = 0; M < 3; M++){
+                                                        for(int N = 0; N < 3; N++){
+                                                            double C_KLMN = lambda*(K==L ? 1:0)*(M==N ? 1:0)
+                                                                        + mu*((K==M ? 1:0)*(L==N ? 1:0) 
+                                                                            + (K==N ? 1:0)*(L==M ? 1:0));
+                                                            val += F(i,K)*C_KLMN*F(j,M)*dNA_dx(L)*dNB_dx(N);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            KmatAB(i,j) = val;
+                                        }
+                                    }
+                                    KmatAB *= JacDet * weight;
                                     Klocal.block<3,3>(3*A,3*B) += KmatAB;
 
                                 }
                             }
+
+                            
                         }
                     }
                 }
@@ -386,16 +516,35 @@ int main(){
                 }
             }
 
-            Eigen::LDLT<Eigen::MatrixXf> solver(Kglobal);
-            du = solver.solve(Rglobal);
-            if(du.norm() < epsilon*u.norm()){ 
-                break;
+            Eigen::MatrixXd KUU = extractSubmatrix(Kglobal, unknownIndexes, unknownIndexes); //extract the submatrix of K corresponding to the unknown degrees of freedom
+            Eigen::MatrixXd KUD = extractSubmatrix(Kglobal, unknownIndexes, dirischletIndexes); //extract the submatrix of K corresponding to the coupling between unknown and dirischlet degrees of freedom
+            Eigen::VectorXd RU(unknownIndexes.size()); //extract the subvector of R corresponding to the unknown degrees of freedom
+            for(int i = 0; i < unknownIndexes.size() ; i++){
+                RU(i) = Rglobal(unknownIndexes[i]);
             }
-            else{
-                u += du;
-            }
+            Eigen::VectorXd R(RU.size()); //final residual after applying dirischlet boundary conditions
+            R = RU; //modify the residual to account for the known displacements at the dirischlet nodes
+
+            Eigen::LDLT<Eigen::MatrixXd> solver(KUU);
+            Eigen::VectorXd duU = solver.solve(-R); //solve for the incremental displacements at the unknown degrees of freedom
             
+            //construct full du vector including known values at dirischlet boundary
+            for(int i = 0 ; i < unknownIndexes.size() ; i++){
+                u(unknownIndexes[i]) += duU(i);
+            }
+
+            //Update the solution vector with the incremental displacements
+            // u += du;
+            cout << "Increment: " << increment+1 << ", Iteration: " << iter+1 << "\n";
+            cout << "Modified residual norm: " << R.norm() << "\n"; //print the norm of the modified residual to monitor convergence of the unknown degrees of freedom
+            cout << "-----------------------------------" << "\n";
+            sendResidual(increment, iter, R.norm());
+            if(R.norm() < epsilon){
+                cout << "Convergence achieved for increment " << increment+1 << " in " << iter+1 << " iterations." << "\n";
+                break; 
+            }
         }
 
     }
+
 }   
