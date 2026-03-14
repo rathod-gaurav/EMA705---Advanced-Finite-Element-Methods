@@ -202,6 +202,102 @@ void sendResidual(int incr, int iter, double residual)
     }
 }
 
+template <unsigned int Nne>
+void write_vtu(
+    const std::string& filename,
+    const std::vector<Node>& nodes,
+    const std::vector<Element<Nne>>& elements,
+    const Eigen::VectorXd& displacement   // size = 3*Nnodes
+)
+{
+    std::ofstream file(filename);
+
+    int Nnodes = nodes.size();
+    int Nelems = elements.size();
+
+    file << "<?xml version=\"1.0\"?>\n";
+    file << "<VTKFile type=\"UnstructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\">\n";
+    file << "<UnstructuredGrid>\n";
+    file << "<Piece NumberOfPoints=\"" << Nnodes 
+         << "\" NumberOfCells=\"" << Nelems << "\">\n";
+
+    // ---------------------
+    // POINTS
+    // ---------------------
+    file << "<Points>\n";
+    file << "<DataArray type=\"Float32\" NumberOfComponents=\"3\" format=\"ascii\">\n";
+
+    for (int i = 0; i < Nnodes; ++i)
+        file << nodes[i].x1 << " "
+             << nodes[i].x2 << " "
+             << nodes[i].x3 << "\n";
+
+    file << "</DataArray>\n</Points>\n";
+
+    // ---------------------
+    // CELLS (Hex = VTK type 12)
+    // ---------------------
+    file << "<Cells>\n";
+
+    // connectivity
+    file << "<DataArray type=\"Int32\" Name=\"connectivity\" format=\"ascii\">\n";
+    for (int e = 0; e < Nelems; ++e)
+        for (int A = 0; A < 8; ++A)
+            file << elements[e].node[A] << " ";
+    file << "\n</DataArray>\n";
+
+    // offsets
+    file << "<DataArray type=\"Int32\" Name=\"offsets\" format=\"ascii\">\n";
+    for (int e = 0; e < Nelems; ++e)
+        file << (e+1)*8 << " ";
+    file << "\n</DataArray>\n";
+
+    // types (12 = hexahedron)
+    file << "<DataArray type=\"UInt8\" Name=\"types\" format=\"ascii\">\n";
+    for (int e = 0; e < Nelems; ++e)
+        file << 12 << " ";
+    file << "\n</DataArray>\n";
+
+    file << "</Cells>\n";
+
+    // ---------------------
+    // POINT DATA (Displacement)
+    // ---------------------
+    file << "<PointData Vectors=\"Displacement\">\n";
+    file << "<DataArray type=\"Float32\" Name=\"Displacement\" NumberOfComponents=\"3\" format=\"ascii\">\n";
+
+    for (int i = 0; i < Nnodes; ++i)
+    {
+        file << displacement(3*i)   << " "
+             << displacement(3*i+1) << " "
+             << displacement(3*i+2) << "\n";
+    }
+
+    file << "</DataArray>\n</PointData>\n";
+
+    file << "</Piece>\n</UnstructuredGrid>\n</VTKFile>\n";
+}
+
+void write_pvd(
+    const std::string& filename,
+    const std::vector<std::string>& vtu_files,
+    const std::vector<double>& times)
+{
+    std::ofstream file(filename);
+
+    file << "<?xml version=\"1.0\"?>\n";
+    file << "<VTKFile type=\"Collection\" version=\"0.1\" byte_order=\"LittleEndian\">\n";
+    file << "<Collection>\n";
+
+    for (size_t i = 0; i < vtu_files.size(); ++i)
+    {
+        file << "<DataSet timestep=\"" << times[i]
+             << "\" group=\"\" part=\"0\" file=\""
+             << vtu_files[i] << "\"/>\n";
+    }
+
+    file << "</Collection>\n</VTKFile>\n";
+}
 
 int main(){
     unsigned int Nsd = 3; //number of spatial dimensions - 3D problem
@@ -301,12 +397,12 @@ int main(){
     }
 
     //store the mesh into points and hexa files
-    std::ofstream points_file("mesh/points.txt");
+    std::ofstream points_file("mesh2/points.txt");
     for(auto& node : nodes){
         points_file << node.x1 << " " << node.x2  << " " << node.x3 << "\n";
     }
 
-    std::ofstream hexas_file("mesh/hexas.txt");
+    std::ofstream hexas_file("mesh2/hexas.txt");
     for(auto& elem : elements){
         hexas_file << elem.node[0] << " " << elem.node[1] << " " << elem.node[2] << " " << elem.node[3] << " " << elem.node[4] << " " << elem.node[5] << " " << elem.node[6] << " " << elem.node[7] << "\n";
     }
@@ -400,6 +496,10 @@ int main(){
         }
     }
     Eigen::VectorXd dirischletValDot = Eigen::VectorXd::Zero(dirischletIndexes.size()); //time derivative of dirischlet values for dynamic problems, initialized to zero for static problem
+
+    //solution files and increments (refered to here as timesteps)
+    std::vector<std::string> solution_files;
+    std::vector<double> solution_timesteps;
 
     cout << "Starting Newton-Raphson Iterations..." << "\n";
     for(unsigned int increment = 0; increment < maxIncrement; increment++){
@@ -545,6 +645,12 @@ int main(){
             }
         }
 
+        std::string filename = "solutions2/solution_" + std::to_string(increment+1) + ".vtu";
+        write_vtu(filename, nodes, elements, u);
+        solution_files.push_back(filename);
+        solution_timesteps.push_back(increment+1);
     }
+
+    write_pvd("solutions2/final_solution.pvd", solution_files, solution_timesteps);
 
 }   
