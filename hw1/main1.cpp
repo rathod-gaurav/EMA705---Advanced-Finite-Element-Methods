@@ -595,14 +595,12 @@ int main(){
                                     for(int i = 0; i < 3; i++){
                                         for(int j = 0; j < 3; j++){
                                             double val = 0.0;
-                                            for(int K = 0; K < 3; K++){
-                                                for(int L = 0; L < 3; L++){
+                                            for(int P = 0; P < 3; P++){
+                                                for(int Q = 0; Q < 3; Q++){
                                                     for(int M = 0; M < 3; M++){
                                                         for(int N = 0; N < 3; N++){
-                                                            double C_KLMN = lambda*(K==L ? 1:0)*(M==N ? 1:0)
-                                                                        + mu*((K==M ? 1:0)*(L==N ? 1:0) 
-                                                                            + (K==N ? 1:0)*(L==M ? 1:0));
-                                                            val += F(i,K)*C_KLMN*F(j,M)*dNA_dx(L)*dNB_dx(N);
+                                                            double C_PQMN = lambda*(P==Q ? 1:0)*(M==N ? 1:0) + mu*((P==M ? 1:0)*(Q==N ? 1:0) + (P==N ? 1:0)*(Q==M ? 1:0));
+                                                            val += F(i,P)*C_PQMN*F(j,M)*dNA_dx(Q)*dNB_dx(N);
                                                         }
                                                     }
                                                 }
