@@ -1,3 +1,0 @@
-/home/grathod/Downloads/Spring26/ME759/Project/MR Solver/build/CMakeFiles/main.dir
-/home/grathod/Downloads/Spring26/ME759/Project/MR Solver/build/CMakeFiles/edit_cache.dir
-/home/grathod/Downloads/Spring26/ME759/Project/MR Solver/build/CMakeFiles/rebuild_cache.dir
