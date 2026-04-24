@@ -7,10 +7,10 @@
 #include <BoundaryConditions.hpp>
 #include <unordered_set>
 
-template <unsigned int Nne, unsigned int Nsd>
+template <unsigned int Nsd, unsigned int Nne>
 class Assembler{
     public: 
-        Assembler(const Mesh<Nne>& mesh, const ElementEvaluator<Nne,Nsd>& elem_evaluator);
+        Assembler(const Mesh<Nsd,Nne>& mesh, const ElementEvaluator<Nsd,Nne>& elem_evaluator);
 
         void assembleSystem(
             const Eigen::VectorXd& u, //global nodal displacement vector (Nnodes*Nsd x 1 vector)
@@ -21,7 +21,7 @@ class Assembler{
         void partition(
             const Eigen::SparseMatrix<double>& Kglobal, //global stiffness matrix (Nnodes*Nsd x Nnodes*Nsd sparse matrix)
             Eigen::VectorXd& Rglobal, //global internal force vector (Nnodes*Nsd x 1 vector)
-            const BoundaryConditions<Nne>& bcs, //boundary conditions object containing the indexes of the dirischlet DOFs
+            const BoundaryConditions<Nsd,Nne>& bcs, //boundary conditions object containing the indexes of the dirischlet DOFs
 
             Eigen::SparseMatrix<double>& KUU, //extract the submatrix of K corresponding to the unknown degrees of freedom
             Eigen::SparseMatrix<double>& KUD, //extract the submatrix of K corresponding to the coupling between unknown and dirischlet degrees of freedom
@@ -34,8 +34,8 @@ class Assembler{
             const std::vector<unsigned int>& rows,
             const std::vector<unsigned int>& cols) const; //function to extract a sparse submatrix from the global stiffness matrix given row and column indexes
     
-        const Mesh<Nne>& mesh_; //reference to the mesh object
-        const ElementEvaluator<Nne,Nsd>& elem_evaluator_; //reference to the element evaluator object
+        const Mesh<Nsd,Nne>& mesh_; //reference to the mesh object
+        const ElementEvaluator<Nsd,Nne>& elem_evaluator_; //reference to the element evaluator object
 
 
 };

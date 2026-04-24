@@ -2,8 +2,22 @@
 #include <vector>
 #include <string>
 
-struct Node{
-    double x1, x2, x3; //global coordinates of the node
+// Primary template (optional, but good for error handling)
+template <unsigned int Nsd>
+struct Node {
+    static_assert(Nsd == 2 || Nsd == 3, "Node only supported for Nsd 2 or 3");
+};
+
+// Specialization for Nsd = 2
+template <>
+struct Node<2> {
+    double x1, x2;
+};
+
+// Specialization for Nsd = 3
+template <>
+struct Node<3> {
+    double x1, x2, x3;
 };
 
 template <unsigned int Nne>
@@ -12,11 +26,11 @@ struct Element{
 };
 
 
-template <unsigned int Nne>
+template <unsigned int Nsd, unsigned int Nne>
 class Mesh{
     public:
         //Mesh class holds the nodes and elements lists
-        std::vector<Node> nodes;
+        std::vector<Node<Nsd>> nodes;
         std::vector<Element<Nne>> elements;
         
         //functions to return number of nodes and number of elements in the mesh

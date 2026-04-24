@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver"
+CMAKE_SOURCE_DIR = "/home/gaurav/Spring26/EMA705/hw3/SVK Solver"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/build"
+CMAKE_BINARY_DIR = "/home/gaurav/Spring26/EMA705/hw3/SVK Solver/build"
 
 # Include any dependencies generated for this target.
 include CMakeFiles/main.dir/depend.make
@@ -70,60 +70,60 @@ include CMakeFiles/main.dir/progress.make
 include CMakeFiles/main.dir/flags.make
 
 CMakeFiles/main.dir/main.cpp.o: CMakeFiles/main.dir/flags.make
-CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw3/SVK\ Solver/main.cpp
+CMakeFiles/main.dir/main.cpp.o: /home/gaurav/Spring26/EMA705/hw3/SVK\ Solver/main.cpp
 CMakeFiles/main.dir/main.cpp.o: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/main.dir/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/main.cpp.o -MF CMakeFiles/main.dir/main.cpp.o.d -o CMakeFiles/main.dir/main.cpp.o -c "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/main.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/gaurav/Spring26/EMA705/hw3/SVK Solver/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/main.dir/main.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/main.cpp.o -MF CMakeFiles/main.dir/main.cpp.o.d -o CMakeFiles/main.dir/main.cpp.o -c "/home/gaurav/Spring26/EMA705/hw3/SVK Solver/main.cpp"
 
 CMakeFiles/main.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/main.dir/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/main.cpp" > CMakeFiles/main.dir/main.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/gaurav/Spring26/EMA705/hw3/SVK Solver/main.cpp" > CMakeFiles/main.dir/main.cpp.i
 
 CMakeFiles/main.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/main.dir/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/main.cpp" -o CMakeFiles/main.dir/main.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/gaurav/Spring26/EMA705/hw3/SVK Solver/main.cpp" -o CMakeFiles/main.dir/main.cpp.s
 
 CMakeFiles/main.dir/src/Quadrature.cpp.o: CMakeFiles/main.dir/flags.make
-CMakeFiles/main.dir/src/Quadrature.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw3/SVK\ Solver/src/Quadrature.cpp
+CMakeFiles/main.dir/src/Quadrature.cpp.o: /home/gaurav/Spring26/EMA705/hw3/SVK\ Solver/src/Quadrature.cpp
 CMakeFiles/main.dir/src/Quadrature.cpp.o: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/main.dir/src/Quadrature.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/Quadrature.cpp.o -MF CMakeFiles/main.dir/src/Quadrature.cpp.o.d -o CMakeFiles/main.dir/src/Quadrature.cpp.o -c "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/src/Quadrature.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/gaurav/Spring26/EMA705/hw3/SVK Solver/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/main.dir/src/Quadrature.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/Quadrature.cpp.o -MF CMakeFiles/main.dir/src/Quadrature.cpp.o.d -o CMakeFiles/main.dir/src/Quadrature.cpp.o -c "/home/gaurav/Spring26/EMA705/hw3/SVK Solver/src/Quadrature.cpp"
 
 CMakeFiles/main.dir/src/Quadrature.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/main.dir/src/Quadrature.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/src/Quadrature.cpp" > CMakeFiles/main.dir/src/Quadrature.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/gaurav/Spring26/EMA705/hw3/SVK Solver/src/Quadrature.cpp" > CMakeFiles/main.dir/src/Quadrature.cpp.i
 
 CMakeFiles/main.dir/src/Quadrature.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/Quadrature.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/src/Quadrature.cpp" -o CMakeFiles/main.dir/src/Quadrature.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/gaurav/Spring26/EMA705/hw3/SVK Solver/src/Quadrature.cpp" -o CMakeFiles/main.dir/src/Quadrature.cpp.s
 
 CMakeFiles/main.dir/src/ShapeFunction.cpp.o: CMakeFiles/main.dir/flags.make
-CMakeFiles/main.dir/src/ShapeFunction.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw3/SVK\ Solver/src/ShapeFunction.cpp
+CMakeFiles/main.dir/src/ShapeFunction.cpp.o: /home/gaurav/Spring26/EMA705/hw3/SVK\ Solver/src/ShapeFunction.cpp
 CMakeFiles/main.dir/src/ShapeFunction.cpp.o: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/main.dir/src/ShapeFunction.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/ShapeFunction.cpp.o -MF CMakeFiles/main.dir/src/ShapeFunction.cpp.o.d -o CMakeFiles/main.dir/src/ShapeFunction.cpp.o -c "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/src/ShapeFunction.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/gaurav/Spring26/EMA705/hw3/SVK Solver/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/main.dir/src/ShapeFunction.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/ShapeFunction.cpp.o -MF CMakeFiles/main.dir/src/ShapeFunction.cpp.o.d -o CMakeFiles/main.dir/src/ShapeFunction.cpp.o -c "/home/gaurav/Spring26/EMA705/hw3/SVK Solver/src/ShapeFunction.cpp"
 
 CMakeFiles/main.dir/src/ShapeFunction.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/main.dir/src/ShapeFunction.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/src/ShapeFunction.cpp" > CMakeFiles/main.dir/src/ShapeFunction.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/gaurav/Spring26/EMA705/hw3/SVK Solver/src/ShapeFunction.cpp" > CMakeFiles/main.dir/src/ShapeFunction.cpp.i
 
 CMakeFiles/main.dir/src/ShapeFunction.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/ShapeFunction.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/src/ShapeFunction.cpp" -o CMakeFiles/main.dir/src/ShapeFunction.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/gaurav/Spring26/EMA705/hw3/SVK Solver/src/ShapeFunction.cpp" -o CMakeFiles/main.dir/src/ShapeFunction.cpp.s
 
 CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.o: CMakeFiles/main.dir/flags.make
-CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw3/SVK\ Solver/src/StVenantKirchhoff.cpp
+CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.o: /home/gaurav/Spring26/EMA705/hw3/SVK\ Solver/src/StVenantKirchhoff.cpp
 CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.o: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.o -MF CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.o.d -o CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.o -c "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/src/StVenantKirchhoff.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/gaurav/Spring26/EMA705/hw3/SVK Solver/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.o -MF CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.o.d -o CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.o -c "/home/gaurav/Spring26/EMA705/hw3/SVK Solver/src/StVenantKirchhoff.cpp"
 
 CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/src/StVenantKirchhoff.cpp" > CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/gaurav/Spring26/EMA705/hw3/SVK Solver/src/StVenantKirchhoff.cpp" > CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.i
 
 CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/src/StVenantKirchhoff.cpp" -o CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/gaurav/Spring26/EMA705/hw3/SVK Solver/src/StVenantKirchhoff.cpp" -o CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.s
 
 # Object files for target main
 main_OBJECTS = \
@@ -141,7 +141,7 @@ main: CMakeFiles/main.dir/src/ShapeFunction.cpp.o
 main: CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.o
 main: CMakeFiles/main.dir/build.make
 main: CMakeFiles/main.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="/home/gaurav/Spring26/EMA705/hw3/SVK Solver/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable main"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/main.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -153,6 +153,6 @@ CMakeFiles/main.dir/clean:
 .PHONY : CMakeFiles/main.dir/clean
 
 CMakeFiles/main.dir/depend:
-	cd "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/build" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver" "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver" "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/build" "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/build" "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/build/CMakeFiles/main.dir/DependInfo.cmake" "--color=$(COLOR)"
+	cd "/home/gaurav/Spring26/EMA705/hw3/SVK Solver/build" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/home/gaurav/Spring26/EMA705/hw3/SVK Solver" "/home/gaurav/Spring26/EMA705/hw3/SVK Solver" "/home/gaurav/Spring26/EMA705/hw3/SVK Solver/build" "/home/gaurav/Spring26/EMA705/hw3/SVK Solver/build" "/home/gaurav/Spring26/EMA705/hw3/SVK Solver/build/CMakeFiles/main.dir/DependInfo.cmake" "--color=$(COLOR)"
 .PHONY : CMakeFiles/main.dir/depend
 

@@ -1,7 +1,7 @@
 CMakeFiles/main.dir/src/Quadrature.cpp.o: \
- /home/grathod/Downloads/Spring26/EMA705/hw3/SVK\ Solver/src/Quadrature.cpp \
+ /home/gaurav/Spring26/EMA705/hw3/SVK\ Solver/src/Quadrature.cpp \
  /usr/include/stdc-predef.h \
- /home/grathod/Downloads/Spring26/EMA705/hw3/SVK\ Solver/include/Quadrature.hpp \
+ /home/gaurav/Spring26/EMA705/hw3/SVK\ Solver/include/Quadrature.hpp \
  /usr/include/c++/13/vector /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \

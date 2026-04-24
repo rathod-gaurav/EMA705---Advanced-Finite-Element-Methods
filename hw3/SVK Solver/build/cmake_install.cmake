@@ -1,4 +1,4 @@
-# Install script for directory: /home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver
+# Install script for directory: /home/gaurav/Spring26/EMA705/hw3/SVK Solver
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/gaurav/Spring26/EMA705/hw3/SVK Solver/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -5,10 +5,10 @@
 #include <vector>
 #include <Eigen/Dense>
 
-template <unsigned int Nne>
+template <unsigned int Nsd, unsigned int Nne>
 class BoundaryConditions{
     public:
-        BoundaryConditions(const Mesh<Nne>& mesh, unsigned int Nsd); //default constructor for BoundaryConditions class
+        BoundaryConditions(const Mesh<Nsd,Nne>& mesh); //default constructor for BoundaryConditions class
 
         //function to store dirischlet boundary conditions map
         void addDirischlet(unsigned int node, int dof, double value); //function to add a dirischlet boundary condition for a given LOCAL node, degree of freedom, and value
@@ -26,8 +26,7 @@ class BoundaryConditions{
 
     private:
         //these variables are private and can only be accessed within the BoundaryConditions class
-        const Mesh<Nne>& mesh_; //the trailing underscore says - this belongs to the class and is not a local variable in the function | this is a common naming convention for class member variables
-        unsigned int Nsd_; //number of spatial dimensions | this is also a member variable of the class
+        const Mesh<Nsd,Nne>& mesh_; //the trailing underscore says - this belongs to the class and is not a local variable in the function | this is a common naming convention for class member variables
         unsigned int totalDOFs_; //total degrees of freedom in the system | this is calculated based on the number of nodes and spatial dimensions and is also a member variable of the class
 
         std::map<unsigned int, double> dirischletVals_; //map to store dirischlet values with key as global node index and value as the dirischlet value for that node

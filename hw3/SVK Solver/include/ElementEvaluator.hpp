@@ -6,11 +6,11 @@
 #include "Quadrature.hpp"
 #include "MaterialModel.hpp"
 
-template <unsigned int Nne, unsigned int Nsd>
+template <unsigned int Nsd, unsigned int Nne>
 class ElementEvaluator{
     public:
         ElementEvaluator( //default constructor
-            const Mesh<Nne>& mesh,
+            const Mesh<Nsd,Nne>& mesh,
             const MaterialModel& material,
             const QuadratureRule& quadRule
         );
@@ -27,7 +27,7 @@ class ElementEvaluator{
 
         Eigen::Matrix3d computeGradU(const Eigen::VectorXd& u_e, double xi1, double xi2, double xi3, Eigen::Matrix3d& JacInv) const; //function to compute the gradient of the displacement field at the quadrature point using the basis function gradients and the nodal displacements
 
-        const Mesh<Nne>& mesh_; //reference to the mesh object
+        const Mesh<Nsd,Nne>& mesh_; //reference to the mesh object
         const MaterialModel& material_; //reference to the material model object
         const QuadratureRule& quadRule_; //reference to the quadrature rule object
 };

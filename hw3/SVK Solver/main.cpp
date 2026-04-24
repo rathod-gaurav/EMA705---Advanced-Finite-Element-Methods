@@ -47,8 +47,8 @@ int main(){
     unsigned int Nel_x3 = 6; //number of elements in x3 direction
 
     //Generate the mesh using the MeshGenerator class
-    MeshGenerator<Nne> meshGen(x1_ll, x1_ul, x2_ll, x2_ul, x3_ll, x3_ul, Nel_x1, Nel_x2, Nel_x3);
-    Mesh<Nne> mesh = meshGen.buildMesh();
+    MeshGenerator<Nsd,Nne> meshGen(x1_ll, x1_ul, x2_ll, x2_ul, x3_ll, x3_ul, Nel_x1, Nel_x2, Nel_x3);
+    Mesh<Nsd,Nne> mesh = meshGen.buildMesh();
 
     //Write the mesh into files ###### see if this can be made an asynchronous operation in the future to speed up the code
     mesh.writeToFiles("mesh"); //writes points.txt and elems.txt in the "mesh" directory
@@ -57,7 +57,7 @@ int main(){
     std::cout << "--------------------" << std::endl;
 
     //Boundary conditions
-    BoundaryConditions<Nne> bcs(mesh, Nsd);
+    BoundaryConditions<Nsd,Nne> bcs(mesh);
     for(unsigned int i = 0 ; i < mesh.Nnodes() ; i++){
         if(mesh.nodes[i].x1 == x1_ll){ //if the node is on the left face of the domain
             bcs.addDirischlet(i, 0, 0.0); //apply dirischlet boundary condition u1 = 0 at this node
@@ -76,11 +76,11 @@ int main(){
     //Problem physics stack
     QuadratureRule              quadRule = Quadrature::gauss_legendre(quadOrder); //get the quadrature points and weights for the specified quadrature order
     StVenantKirchhoff           material(lambda, mu); //create an instance of the St. Venant-Kirchhoff material model with the specified Lamé parameters
-    ElementEvaluator<Nne, Nsd>  elemEval(mesh, material, quadRule); //create an instance of element evaluator with the mesh, material model, and quadrature rule
-    Assembler<Nne, Nsd>         assembler(mesh, elemEval); //create an instance of the assembler with the mesh and element evaluator
-    OutputWriter<Nne>           writer("solutions"); //create an instance of the output writer to write results to the "output" directory
+    ElementEvaluator<Nsd, Nne>  elemEval(mesh, material, quadRule); //create an instance of element evaluator with the mesh, material model, and quadrature rule
+    Assembler<Nsd, Nne>         assembler(mesh, elemEval); //create an instance of the assembler with the mesh and element evaluator
+    OutputWriter<Nsd, Nne>           writer("solutions"); //create an instance of the output writer to write results to the "output" directory
 
-    NonlinearSolver<Nne, Nsd>   solver(tol, maxIncr, maxIter); //create an instance of the nonlinear solver with a tolerance of 1e-6, maximum 10 increments, and maximum 20 iterations per increment
+    NonlinearSolver<Nsd, Nne>   solver(tol, maxIncr, maxIter); //create an instance of the nonlinear solver with a tolerance of 1e-6, maximum 10 increments, and maximum 20 iterations per increment
 
     Eigen::VectorXd u = Eigen::VectorXd::Zero(mesh.Nnodes()*Nsd); //initialize the global displacement vector to zero
 

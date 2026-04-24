@@ -1,8 +1,8 @@
 #pragma once
 
-template <unsigned int Nne, unsigned int Nsd>
-ElementEvaluator<Nne, Nsd>::ElementEvaluator(
-    const Mesh<Nne>& mesh,
+template <unsigned int Nsd, unsigned int Nne>
+ElementEvaluator<Nsd, Nne>::ElementEvaluator(
+    const Mesh<Nsd,Nne>& mesh,
     const MaterialModel& material,
     const QuadratureRule& quadRule
 ) : 
@@ -11,8 +11,8 @@ ElementEvaluator<Nne, Nsd>::ElementEvaluator(
     quadRule_(quadRule)
 {}
 
-template <unsigned int Nne, unsigned int Nsd>
-Eigen::Matrix3d ElementEvaluator<Nne, Nsd>::computeJacobian(unsigned int e, double xi1, double xi2, double xi3) const{
+template <unsigned int Nsd, unsigned int Nne>
+Eigen::Matrix3d ElementEvaluator<Nsd, Nne>::computeJacobian(unsigned int e, double xi1, double xi2, double xi3) const{
     Eigen::Matrix3d J = Eigen::Matrix3d::Zero();
         
     for(int A = 0 ; A < Nne ; A++){
@@ -31,8 +31,8 @@ Eigen::Matrix3d ElementEvaluator<Nne, Nsd>::computeJacobian(unsigned int e, doub
     return J;
 }
 
-template <unsigned int Nne, unsigned int Nsd>
-Eigen::Matrix3d ElementEvaluator<Nne, Nsd>::computeGradU(const Eigen::VectorXd& u_e, double xi1, double xi2, double xi3, Eigen::Matrix3d& JacInv) const {
+template <unsigned int Nsd, unsigned int Nne>
+Eigen::Matrix3d ElementEvaluator<Nsd, Nne>::computeGradU(const Eigen::VectorXd& u_e, double xi1, double xi2, double xi3, Eigen::Matrix3d& JacInv) const {
     Eigen::Matrix3d grad_u = Eigen::Matrix3d::Zero();
     //compute the gradient of the displacement field at the quadrature point using the basis function gradients and the nodal displacements
     for(int A = 0 ; A < Nne ; A++){
@@ -53,8 +53,8 @@ Eigen::Matrix3d ElementEvaluator<Nne, Nsd>::computeGradU(const Eigen::VectorXd& 
     return grad_u;
 }
 
-template <unsigned int Nne, unsigned int Nsd>
-void ElementEvaluator<Nne, Nsd>::computeElement(
+template <unsigned int Nsd, unsigned int Nne>
+void ElementEvaluator<Nsd, Nne>::computeElement(
     unsigned int e, //element index
     const Eigen::VectorXd& u_e, //element nodal displacements (Nne*3 x 1 vector)
     Eigen::MatrixXd& Klocal, //element stiffness matrix (Nne*3 x Nne*3 matrix)

@@ -10,13 +10,13 @@
 #include <sstream>
 #include <curl/curl.h>
 
-template <unsigned int Nne>
+template <unsigned int Nsd, unsigned int Nne>
 class OutputWriter{
     public:
         explicit OutputWriter(const std::string& outputDir); //constructor that takes the output directory as an argument
 
         std::string writeVTU(
-            const Mesh<Nne>& mesh,
+            const Mesh<Nsd,Nne>& mesh,
             const Eigen::VectorXd& u,
             unsigned int incr
         );

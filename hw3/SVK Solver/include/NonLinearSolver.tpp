@@ -1,15 +1,15 @@
 #pragma once //include this only once during compilation
 
-template <unsigned int Nne, unsigned int Nsd>
-NonlinearSolver<Nne, Nsd>::NonlinearSolver(double tol, unsigned int maxIncr, unsigned int maxIter)
+template <unsigned int Nsd, unsigned int Nne>
+NonlinearSolver<Nsd, Nne>::NonlinearSolver(double tol, unsigned int maxIncr, unsigned int maxIter)
     : tol_(tol), maxIncr_(maxIncr), maxIter_(maxIter)
 {}
 
-template <unsigned int Nne, unsigned int Nsd>
-void NonlinearSolver<Nne, Nsd>::solve(
+template <unsigned int Nsd, unsigned int Nne>
+void NonlinearSolver<Nsd, Nne>::solve(
     Eigen::VectorXd& u, //displacement vector, modified in place
-    const Assembler<Nne, Nsd>& assembler, //provides Kglobal, Rglobal
-    const BoundaryConditions<Nne>& bcs, //provides dirischlet indexes and values
+    const Assembler<Nsd, Nne>& assembler, //provides Kglobal, Rglobal
+    const BoundaryConditions<Nsd,Nne>& bcs, //provides dirischlet indexes and values
     std::function<void(unsigned int, unsigned int, double)> iterCallback
 ){
     Eigen::VectorXd Rglobal, RU; //global residual vector

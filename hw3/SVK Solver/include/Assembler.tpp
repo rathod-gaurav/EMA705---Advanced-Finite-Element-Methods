@@ -1,13 +1,13 @@
 #pragma once //include this only once during compilation
 
-template <unsigned int Nne, unsigned int Nsd>
-Assembler<Nne,Nsd>::Assembler(
-    const Mesh<Nne>& mesh, const ElementEvaluator<Nne,Nsd>& elem_evaluator
+template <unsigned int Nsd, unsigned int Nne>
+Assembler<Nsd,Nne>::Assembler(
+    const Mesh<Nsd,Nne>& mesh, const ElementEvaluator<Nsd,Nne>& elem_evaluator
 ) : mesh_(mesh), elem_evaluator_(elem_evaluator)
 {}
 
-template <unsigned int Nne, unsigned int Nsd>
-Eigen::SparseMatrix<double> Assembler<Nne,Nsd>::extractSparseSubmatrix(
+template <unsigned int Nsd, unsigned int Nne>
+Eigen::SparseMatrix<double> Assembler<Nsd,Nne>::extractSparseSubmatrix(
     const Eigen::SparseMatrix<double>& K,
     const std::vector<unsigned int>& rows,
     const std::vector<unsigned int>& cols) const {
@@ -37,8 +37,8 @@ Eigen::SparseMatrix<double> Assembler<Nne,Nsd>::extractSparseSubmatrix(
     return sub;
 }
 
-template <unsigned int Nne, unsigned int Nsd>
-void Assembler<Nne,Nsd>::assembleSystem(
+template <unsigned int Nsd, unsigned int Nne>
+void Assembler<Nsd,Nne>::assembleSystem(
             const Eigen::VectorXd& u, //global nodal displacement vector (Nnodes*Nsd x 1 vector)
             Eigen::SparseMatrix<double>& Kglobal, //global stiffness matrix (Nnodes*Nsd x Nnodes*Nsd sparse matrix)
             Eigen::VectorXd& Rglobal //global internal force vector (Nnodes*Nsd x 1 vector)
@@ -90,11 +90,11 @@ void Assembler<Nne,Nsd>::assembleSystem(
     Kglobal.makeCompressed(); //compress the sparse matrix for efficient arithmetic and solving
 }
 
-template <unsigned int Nne, unsigned int Nsd>
-void Assembler<Nne,Nsd>::partition(
+template <unsigned int Nsd, unsigned int Nne>
+void Assembler<Nsd,Nne>::partition(
     const Eigen::SparseMatrix<double>& Kglobal, //global stiffness matrix (Nnodes*Nsd x Nnodes*Nsd sparse matrix)
     Eigen::VectorXd& Rglobal, //global internal force vector (Nnodes*Nsd x 1 vector)
-    const BoundaryConditions<Nne>& bcs, //boundary conditions object containing the indexes of the dirischlet DOFs
+    const BoundaryConditions<Nsd,Nne>& bcs, //boundary conditions object containing the indexes of the dirischlet DOFs
 
     Eigen::SparseMatrix<double>& KUU, //extract the submatrix of K corresponding to the unknown degrees of freedom
     Eigen::SparseMatrix<double>& KUD, //extract the submatrix of K corresponding to the coupling between unknown and dirischlet degrees of freedom

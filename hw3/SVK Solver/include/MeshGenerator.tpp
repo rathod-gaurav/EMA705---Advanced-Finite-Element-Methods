@@ -1,7 +1,24 @@
 #pragma once //include this file only once during compilation
 
+// 2D //
 template <unsigned int Nne>
-MeshGenerator<Nne>::MeshGenerator( //assign the function parameters to the class member variables using an initializer list
+MeshGenerator<2,Nne>::MeshGenerator( //assign the function parameters to the class member variables using an initializer list
+    //domain parameters
+    double x1_ll, double x1_ul,
+    double x2_ll, double x2_ul,
+    //mesh parameters
+    unsigned int Nel_x1, unsigned int Nel_x2
+):
+    x1_ll_(x1_ll), x1_ul_(x1_ul),
+    x2_ll_(x2_ll), x2_ul_(x2_ul),
+    Nel_x1_(Nel_x1), Nel_x2_(Nel_x2)
+{}
+
+
+
+// 3D //
+template <unsigned int Nne>
+MeshGenerator<3,Nne>::MeshGenerator( //assign the function parameters to the class member variables using an initializer list
     //domain parameters
     double x1_ll, double x1_ul,
     double x2_ll, double x2_ul,
@@ -16,8 +33,8 @@ MeshGenerator<Nne>::MeshGenerator( //assign the function parameters to the class
 {}
 
 template <unsigned int Nne>
-Mesh<Nne> MeshGenerator<Nne>::buildMesh() const{
-    Mesh<Nne> mesh; //create an empty mesh object
+Mesh<3,Nne> MeshGenerator<3,Nne>::buildMesh() const{
+    Mesh<Nsd,Nne> mesh; //create an empty mesh object
 
     unsigned int Nnodes_x1 = Nel_x1_ + 1; //number of nodes in x1 direction
     unsigned int Nnodes_x2 = Nel_x2_ + 1; //number of nodes in x2 direction
@@ -33,7 +50,7 @@ Mesh<Nne> MeshGenerator<Nne>::buildMesh() const{
     for(unsigned int k = 0 ; k < Nnodes_x3 ; k++){
         for(unsigned int j = 0 ; j < Nnodes_x2 ; j++){
             for(unsigned int i = 0 ; i < Nnodes_x1 ; i++){
-                Node n;
+                Node<Nsd> n;
                 n.x1 = x1_ll_ + i*dx1;
                 n.x2 = x2_ll_ + j*dx2;
                 n.x3 = x3_ll_ + k*dx3;

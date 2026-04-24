@@ -6,15 +6,15 @@
 #include "Assembler.hpp"
 #include "BoundaryConditions.hpp"
 
-template <unsigned int Nne, unsigned int Nsd>
+template <unsigned int Nsd, unsigned int Nne>
 class NonlinearSolver{
     public:
         NonlinearSolver(double tol, unsigned int maxIncr, unsigned int maxIter);
 
         void solve(
             Eigen::VectorXd& u, //displacement vector, modified in place
-            const Assembler<Nne, Nsd>& assembler, //provides Kglobal, Rglobal
-            const BoundaryConditions<Nne>& bcs, //provides dirischlet indexes and values
+            const Assembler<Nsd, Nne>& assembler, //provides Kglobal, Rglobal
+            const BoundaryConditions<Nsd,Nne>& bcs, //provides dirischlet indexes and values
             std::function<void(unsigned int, unsigned int, double)> iterCallback = nullptr //optional callback function for iteration progress (increment, iteration, residual norm)
         );
 
