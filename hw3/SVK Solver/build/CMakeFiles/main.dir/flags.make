@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I"/home/gaurav/Spring26/EMA705/hw3/SVK Solver/include" -I/mnt/c/Users/ratho/Downloads/eigen-5.0.0/eigen-5.0.0
+CXX_INCLUDES = -I"/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/include" -I/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0
 
 CXX_FLAGS =  -O3 -g -march=native -std=gnu++17
 

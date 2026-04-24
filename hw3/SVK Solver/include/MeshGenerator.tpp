@@ -14,7 +14,66 @@ MeshGenerator<2,Nne>::MeshGenerator( //assign the function parameters to the cla
     Nel_x1_(Nel_x1), Nel_x2_(Nel_x2)
 {}
 
+// 2D //
+template <unsigned int Nne>
+Mesh<2,Nne> MeshGenerator<2,Nne>::buildMesh() const{
+    Mesh<Nsd,Nne> mesh; //create an empty mesh object
 
+    unsigned int Nnodes_x1 = Nel_x1_ + 1; //number of nodes in x1 direction
+    unsigned int Nnodes_x2 = Nel_x2_ + 1; //number of nodes in x2 direction
+    
+    unsigned int Nt = Nnodes_x1 * Nnodes_x2; //total number of nodes
+
+    double dx1 = (x1_ul_ - x1_ll_) / Nel_x1_; //spacing between nodes in x1 direction
+    double dx2 = (x2_ul_ - x2_ll_) / Nel_x2_; //spacing between nodes in x2 direction
+
+    //Build the nodes list of the mesh
+    mesh.nodes.reserve(Nt);
+    
+    for(unsigned int j = 0 ; j < Nnodes_x2 ; j++){
+        for(unsigned int i = 0 ; i < Nnodes_x1 ; i++){
+            Node<Nsd> n;
+            n.x1 = x1_ll_ + i*dx1;
+            n.x2 = x2_ll_ + j*dx2;
+            mesh.nodes.push_back(n);
+        }
+    }
+
+    //variables required for element connectivity
+    unsigned int Nel_t = Nel_x1_ * Nel_x2_; //total number of elements
+    mesh.elements.reserve(Nel_t);
+
+    if(Nne == 3){//triangle elements
+        throw std::runtime_error("Element triangulation not implemented in for given Nne");
+    }
+    if(Nne == 4){//quadrilateral elements
+        
+        for(unsigned int j = 0 ; j < Nel_x2_ ; j++){
+            for(unsigned int i = 0 ; i < Nel_x1_ ; i++){
+                Element<Nne> elem;
+                
+                int n0 = i + j*Nnodes_x1;
+                int n1 = n0 + 1;
+                int n2 = Nnodes_x1 + i + j*Nnodes_x1 + 1;
+                int n3 = n2 - 1;
+
+                elem.node[0] = n0;
+                elem.node[1] = n1;
+                elem.node[2] = n2;
+                elem.node[3] = n3;
+
+                mesh.elements.push_back(elem);
+            }
+        }
+    }
+    
+
+    //Build the elements list of the mesh
+    
+
+    return mesh; //return the built mesh object
+
+}
 
 // 3D //
 template <unsigned int Nne>
@@ -32,6 +91,7 @@ MeshGenerator<3,Nne>::MeshGenerator( //assign the function parameters to the cla
     Nel_x1_(Nel_x1), Nel_x2_(Nel_x2), Nel_x3_(Nel_x3)
 {}
 
+// 3D //
 template <unsigned int Nne>
 Mesh<3,Nne> MeshGenerator<3,Nne>::buildMesh() const{
     Mesh<Nsd,Nne> mesh; //create an empty mesh object
@@ -64,37 +124,45 @@ Mesh<3,Nne> MeshGenerator<3,Nne>::buildMesh() const{
 
     //Build the elements list of the mesh
     mesh.elements.reserve(Nel_t);
-    for(unsigned int k = 0 ; k < Nel_x3_ ; k++){
-        for(unsigned int j = 0 ; j < Nel_x2_ ; j++){
-            for(unsigned int i = 0 ; i < Nel_x1_ ; i++){
-                Element<Nne> elem;
-                unsigned int base = i 
-                     + j * Nnodes_x1 
-                     + k * (Nnodes_x1 * Nnodes_x2);
 
-                unsigned int n0 = base;
-                unsigned int n1 = base + 1;
-                unsigned int n3 = base + Nnodes_x1;
-                unsigned int n2 = n3 + 1;
+    if(Nne == 8){//hexahedral elements
+        for(unsigned int k = 0 ; k < Nel_x3_ ; k++){
+            for(unsigned int j = 0 ; j < Nel_x2_ ; j++){
+                for(unsigned int i = 0 ; i < Nel_x1_ ; i++){
+                    Element<Nne> elem;
+                    unsigned int base = i 
+                        + j * Nnodes_x1 
+                        + k * (Nnodes_x1 * Nnodes_x2);
 
-                unsigned int n4 = base + Nnodes_x1 * Nnodes_x2;
-                unsigned int n5 = n4 + 1;
-                unsigned int n7 = n4 + Nnodes_x1;
-                unsigned int n6 = n7 + 1;
+                    unsigned int n0 = base;
+                    unsigned int n1 = base + 1;
+                    unsigned int n3 = base + Nnodes_x1;
+                    unsigned int n2 = n3 + 1;
 
-                elem.node[0] = n0;
-                elem.node[1] = n1;
-                elem.node[2] = n2;
-                elem.node[3] = n3;
-                elem.node[4] = n4;
-                elem.node[5] = n5;
-                elem.node[6] = n6;
-                elem.node[7] = n7;
+                    unsigned int n4 = base + Nnodes_x1 * Nnodes_x2;
+                    unsigned int n5 = n4 + 1;
+                    unsigned int n7 = n4 + Nnodes_x1;
+                    unsigned int n6 = n7 + 1;
 
-                mesh.elements.push_back(elem);
+                    elem.node[0] = n0;
+                    elem.node[1] = n1;
+                    elem.node[2] = n2;
+                    elem.node[3] = n3;
+                    elem.node[4] = n4;
+                    elem.node[5] = n5;
+                    elem.node[6] = n6;
+                    elem.node[7] = n7;
+
+                    mesh.elements.push_back(elem);
+                }
             }
         }
     }
+    else{
+        throw std::runtime_error("Element triangulation not implemented in for given Nne");
+    }
+
+    
 
     return mesh; //return the built mesh object
 
