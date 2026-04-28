@@ -3,13 +3,14 @@
 #include <Eigen/Dense>
 
 //Any class that inherits from this MaterialModel class must provide these methods
-
+template<unsigned int Nsd, unsigned int Nne>
 class MaterialModel{
     public:
+        using MatrixNsd = Eigen::Matrix<double, Nsd, Nsd>;
         virtual void compute(
-            const Eigen::Matrix3d& F, //deformation gradient
-            Eigen::Matrix3d& S, //second Piola-Kirchhoff stress tensor
-            Eigen::Matrix3d& P, //first Piola-Kirchhoff stress tensor
+            const MatrixNsd& F, //deformation gradient
+            MatrixNsd& S, //second Piola-Kirchhoff stress tensor
+            MatrixNsd& P, //first Piola-Kirchhoff stress tensor
             Eigen::MatrixXd& C_mat //material tangent stiffness matrix (4th order elasticity tensor in Voigt notation)
         ) const = 0; // = 0 means this is a pure virtual function. which meahc that MaterialModel itself cannot be instantiated, but any derived class from this must inplement this compute method
 

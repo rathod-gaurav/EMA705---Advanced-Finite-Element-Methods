@@ -44,7 +44,7 @@ Mesh<2,Nne> MeshGenerator<2,Nne>::buildMesh() const{
     mesh.elements.reserve(Nel_t);
 
     if(Nne == 3){//triangle elements
-        throw std::runtime_error("Element triangulation not implemented in for given Nne");
+        throw std::runtime_error("Element triangulation not implemented for given Nne");
     }
     if(Nne == 4){//quadrilateral elements
         
@@ -159,7 +159,7 @@ Mesh<3,Nne> MeshGenerator<3,Nne>::buildMesh() const{
         }
     }
     else{
-        throw std::runtime_error("Element triangulation not implemented in for given Nne");
+        throw std::runtime_error("Element triangulation not implemented for given Nne");
     }
 
     

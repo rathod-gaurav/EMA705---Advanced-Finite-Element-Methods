@@ -11,7 +11,7 @@ class ElementEvaluator{
     public:
         ElementEvaluator( //default constructor
             const Mesh<Nsd,Nne>& mesh,
-            const MaterialModel& material,
+            const MaterialModel<Nsd,Nne>& material,
             const QuadratureRule& quadRule
         );
 
@@ -23,12 +23,15 @@ class ElementEvaluator{
         ) const;
     
     private:
-        Eigen::Matrix3d computeJacobian(unsigned int e, double xi1, double xi2, double xi3) const; //function to compute the Jacobian matrix for the element at given quadrature point (xi1, xi2, xi3)
+        using MatrixNsd = Eigen::Matrix<double, Nsd, Nsd>;
+        using VectorNsd = Eigen::Vector<double, Nsd>;
+        
+        MatrixNsd computeJacobian(unsigned int e, const VectorNsd& xi_vec) const; //function to compute the Jacobian matrix for the element at given quadrature point (xi1, xi2, xi3)
 
-        Eigen::Matrix3d computeGradU(const Eigen::VectorXd& u_e, double xi1, double xi2, double xi3, Eigen::Matrix3d& JacInv) const; //function to compute the gradient of the displacement field at the quadrature point using the basis function gradients and the nodal displacements
+        MatrixNsd computeGradU(const Eigen::VectorXd& u_e, const VectorNsd& xi_vec, const MatrixNsd& JacInv) const; //function to compute the gradient of the displacement field at the quadrature point using the basis function gradients and the nodal displacements
 
         const Mesh<Nsd,Nne>& mesh_; //reference to the mesh object
-        const MaterialModel& material_; //reference to the material model object
+        const MaterialModel<Nsd,Nne>& material_; //reference to the material model object
         const QuadratureRule& quadRule_; //reference to the quadrature rule object
 };
 

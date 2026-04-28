@@ -11,10 +11,10 @@ void Mesh<Nsd, Nne>::writeToFiles(const std::string& dir) const {
 
     std::ofstream points_file(dir + "/points.txt");
     for(const auto& node : nodes){
-        if(Nsd == 2){
+        if constexpr (Nsd == 2){
             points_file << node.x1 << " " << node.x2 << "\n";
         }
-        else if(Nsd == 3){
+        else if constexpr (Nsd == 3){
             points_file << node.x1 << " " << node.x2  << " " << node.x3 << "\n";
         }
     }

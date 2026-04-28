@@ -22,7 +22,7 @@ int main(){
 
     //Problem parameters
     constexpr unsigned int Nsd = 3; //3D problem
-    constexpr unsigned int Nne = 8; //hexahedral elements | 8 nodes per element
+    constexpr unsigned int Nne = 8;//hexahedral elements | 8 nodes per element
 
     //Quadrature order
     unsigned int quadOrder = 3; //number of quadrature points in each direction for
@@ -47,6 +47,7 @@ int main(){
     unsigned int Nel_x3 = 6; //number of elements in x3 direction
 
     //Generate the mesh using the MeshGenerator class
+    // MeshGenerator<Nsd,Nne> meshGen(x1_ll, x1_ul, x2_ll, x2_ul, Nel_x1, Nel_x2);
     MeshGenerator<Nsd,Nne> meshGen(x1_ll, x1_ul, x2_ll, x2_ul, x3_ll, x3_ul, Nel_x1, Nel_x2, Nel_x3);
     Mesh<Nsd,Nne> mesh = meshGen.buildMesh();
 
@@ -75,7 +76,7 @@ int main(){
 
     //Problem physics stack
     QuadratureRule              quadRule = Quadrature::gauss_legendre(quadOrder); //get the quadrature points and weights for the specified quadrature order
-    StVenantKirchhoff           material(lambda, mu); //create an instance of the St. Venant-Kirchhoff material model with the specified Lamé parameters
+    StVenantKirchhoff<Nsd,Nne>  material(lambda, mu); //create an instance of the St. Venant-Kirchhoff material model with the specified Lamé parameters
     ElementEvaluator<Nsd, Nne>  elemEval(mesh, material, quadRule); //create an instance of element evaluator with the mesh, material model, and quadrature rule
     Assembler<Nsd, Nne>         assembler(mesh, elemEval); //create an instance of the assembler with the mesh and element evaluator
     OutputWriter<Nsd, Nne>           writer("solutions"); //create an instance of the output writer to write results to the "output" directory

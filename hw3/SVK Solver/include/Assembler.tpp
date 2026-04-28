@@ -76,13 +76,13 @@ void Assembler<Nsd,Nne>::assembleSystem(
             for(int B = 0; B < Nne ; B++)
             {
                 int Bglobal = mesh_.elements[e].node[B];
-                for(int i = 0 ; i < 3 ; i++){
-                    for(int j = 0 ; j < 3 ; j++){
-                        Kglobal_triplets.emplace_back(3*Aglobal + i, 3*Bglobal + j, Klocal(3*A + i, 3*B + j));
+                for(int i = 0 ; i < Nsd ; i++){
+                    for(int j = 0 ; j < Nsd ; j++){
+                        Kglobal_triplets.emplace_back(Nsd*Aglobal + i, Nsd*Bglobal + j, Klocal(Nsd*A + i, Nsd*B + j));
                     }
                 }
             }
-            Rglobal.segment(3*Aglobal,3) += Rlocal.segment(3*A,3);
+            Rglobal.segment(Nsd*Aglobal,Nsd) += Rlocal.segment(Nsd*A,Nsd);
             // cout << "Assembled element " << e+1 << "/" << Nel_t << "\r";
         }
     }

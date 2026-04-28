@@ -3,10 +3,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/main.dir/main.cpp.o.d"
   "CMakeFiles/main.dir/src/Quadrature.cpp.o"
   "CMakeFiles/main.dir/src/Quadrature.cpp.o.d"
-  "CMakeFiles/main.dir/src/ShapeFunction.cpp.o"
-  "CMakeFiles/main.dir/src/ShapeFunction.cpp.o.d"
-  "CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.o"
-  "CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.o.d"
   "main"
   "main.pdb"
 )

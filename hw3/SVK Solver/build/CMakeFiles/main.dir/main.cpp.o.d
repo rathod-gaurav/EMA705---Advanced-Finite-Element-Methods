@@ -580,9 +580,11 @@ CMakeFiles/main.dir/main.cpp.o: \
  /home/grathod/Downloads/Spring26/EMA705/hw3/SVK\ Solver/include/BoundaryConditions.tpp \
  /home/grathod/Downloads/Spring26/EMA705/hw3/SVK\ Solver/include/ElementEvaluator.hpp \
  /home/grathod/Downloads/Spring26/EMA705/hw3/SVK\ Solver/include/ShapeFunction.hpp \
+ /home/grathod/Downloads/Spring26/EMA705/hw3/SVK\ Solver/include/ShapeFunction.tpp \
  /home/grathod/Downloads/Spring26/EMA705/hw3/SVK\ Solver/include/MaterialModel.hpp \
  /home/grathod/Downloads/Spring26/EMA705/hw3/SVK\ Solver/include/ElementEvaluator.tpp \
  /home/grathod/Downloads/Spring26/EMA705/hw3/SVK\ Solver/include/StVenantKirchhoff.hpp \
+ /home/grathod/Downloads/Spring26/EMA705/hw3/SVK\ Solver/include/StVenantKirchhoff.tpp \
  /home/grathod/Downloads/Spring26/EMA705/hw3/SVK\ Solver/include/Assembler.hpp \
  /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/Sparse \
  /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/SparseCore \

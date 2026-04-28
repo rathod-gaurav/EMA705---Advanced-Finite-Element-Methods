@@ -177,54 +177,6 @@ src/Quadrature.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/Quadrature.cpp.s
 .PHONY : src/Quadrature.cpp.s
 
-src/ShapeFunction.o: src/ShapeFunction.cpp.o
-.PHONY : src/ShapeFunction.o
-
-# target to build an object file
-src/ShapeFunction.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/ShapeFunction.cpp.o
-.PHONY : src/ShapeFunction.cpp.o
-
-src/ShapeFunction.i: src/ShapeFunction.cpp.i
-.PHONY : src/ShapeFunction.i
-
-# target to preprocess a source file
-src/ShapeFunction.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/ShapeFunction.cpp.i
-.PHONY : src/ShapeFunction.cpp.i
-
-src/ShapeFunction.s: src/ShapeFunction.cpp.s
-.PHONY : src/ShapeFunction.s
-
-# target to generate assembly for a file
-src/ShapeFunction.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/ShapeFunction.cpp.s
-.PHONY : src/ShapeFunction.cpp.s
-
-src/StVenantKirchhoff.o: src/StVenantKirchhoff.cpp.o
-.PHONY : src/StVenantKirchhoff.o
-
-# target to build an object file
-src/StVenantKirchhoff.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.o
-.PHONY : src/StVenantKirchhoff.cpp.o
-
-src/StVenantKirchhoff.i: src/StVenantKirchhoff.cpp.i
-.PHONY : src/StVenantKirchhoff.i
-
-# target to preprocess a source file
-src/StVenantKirchhoff.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.i
-.PHONY : src/StVenantKirchhoff.cpp.i
-
-src/StVenantKirchhoff.s: src/StVenantKirchhoff.cpp.s
-.PHONY : src/StVenantKirchhoff.s
-
-# target to generate assembly for a file
-src/StVenantKirchhoff.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/StVenantKirchhoff.cpp.s
-.PHONY : src/StVenantKirchhoff.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -240,12 +192,6 @@ help:
 	@echo "... src/Quadrature.o"
 	@echo "... src/Quadrature.i"
 	@echo "... src/Quadrature.s"
-	@echo "... src/ShapeFunction.o"
-	@echo "... src/ShapeFunction.i"
-	@echo "... src/ShapeFunction.s"
-	@echo "... src/StVenantKirchhoff.o"
-	@echo "... src/StVenantKirchhoff.i"
-	@echo "... src/StVenantKirchhoff.s"
 .PHONY : help
 
 
