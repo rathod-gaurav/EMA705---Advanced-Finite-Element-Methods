@@ -1,8 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/main.dir/main.cpp.o"
   "CMakeFiles/main.dir/main.cpp.o.d"
-  "CMakeFiles/main.dir/src/Quadrature.cpp.o"
-  "CMakeFiles/main.dir/src/Quadrature.cpp.o.d"
   "main"
   "main.pdb"
 )

@@ -2,7 +2,7 @@
 
 #include <tuple>
 
-template <unsigned int Nsd, unsigned int Nne>
+template <unsigned int Nsd, unsigned int Nne, unsigned int BfOrder>
 class ShapeFunction{
     public:
         using VectorNsd = Eigen::Vector<double, Nsd>;

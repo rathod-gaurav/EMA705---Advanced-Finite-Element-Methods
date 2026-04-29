@@ -153,30 +153,6 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/main.cpp.s
 .PHONY : main.cpp.s
 
-src/Quadrature.o: src/Quadrature.cpp.o
-.PHONY : src/Quadrature.o
-
-# target to build an object file
-src/Quadrature.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/Quadrature.cpp.o
-.PHONY : src/Quadrature.cpp.o
-
-src/Quadrature.i: src/Quadrature.cpp.i
-.PHONY : src/Quadrature.i
-
-# target to preprocess a source file
-src/Quadrature.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/Quadrature.cpp.i
-.PHONY : src/Quadrature.cpp.i
-
-src/Quadrature.s: src/Quadrature.cpp.s
-.PHONY : src/Quadrature.s
-
-# target to generate assembly for a file
-src/Quadrature.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/Quadrature.cpp.s
-.PHONY : src/Quadrature.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -189,9 +165,6 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
-	@echo "... src/Quadrature.o"
-	@echo "... src/Quadrature.i"
-	@echo "... src/Quadrature.s"
 .PHONY : help
 
 

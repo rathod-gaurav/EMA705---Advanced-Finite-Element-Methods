@@ -9,7 +9,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/main.cpp" "CMakeFiles/main.dir/main.cpp.o" "gcc" "CMakeFiles/main.dir/main.cpp.o.d"
-  "/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/src/Quadrature.cpp" "CMakeFiles/main.dir/src/Quadrature.cpp.o" "gcc" "CMakeFiles/main.dir/src/Quadrature.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

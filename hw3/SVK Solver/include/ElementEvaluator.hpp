@@ -12,7 +12,7 @@ class ElementEvaluator{
         ElementEvaluator( //default constructor
             const Mesh<Nsd,Nne>& mesh,
             const MaterialModel<Nsd,Nne>& material,
-            const QuadratureRule& quadRule
+            const QuadratureRule<Nsd,Nne>& quadRule
         );
 
         void computeElement(
@@ -32,7 +32,7 @@ class ElementEvaluator{
 
         const Mesh<Nsd,Nne>& mesh_; //reference to the mesh object
         const MaterialModel<Nsd,Nne>& material_; //reference to the material model object
-        const QuadratureRule& quadRule_; //reference to the quadrature rule object
+        const QuadratureRule<Nsd,Nne>& quadRule_; //reference to the quadrature rule object
 };
 
 #include "ElementEvaluator.tpp" //include the implementation of the template class

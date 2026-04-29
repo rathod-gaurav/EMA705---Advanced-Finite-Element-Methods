@@ -1,8 +1,9 @@
-#include "Quadrature.hpp"
+#pragma once
 #include <stdexcept> // for std::invalid_argument
 
-QuadratureRule Quadrature::gauss_legendre(unsigned int n) {
-    QuadratureRule rule;
+template <unsigned int Nsd, unsigned int Nne>
+QuadratureRule<Nsd,Nne> Quadrature<Nsd,Nne>::gauss_legendre(unsigned int n) {
+    QuadratureRule<Nsd, Nne> rule;
 
     switch(n) {
         case 1:
@@ -45,6 +46,33 @@ QuadratureRule Quadrature::gauss_legendre(unsigned int n) {
                               0.3607615730481386,  0.1713244923791704 };
             break;
 
+        default:
+            throw std::invalid_argument("Gauss-Legendre quadrature not implemented for this n");
+    }
+
+    return rule;
+};
+
+template <>//specialization for 2D triangle elements
+QuadratureRule<2,3> Quadrature<2,3>::gauss_legendre(unsigned int n){
+    QuadratureRule<2,3> rule;
+
+    switch(n){
+        case 1:
+            rule.points_x1 = { 0.333 };
+            rule.points_x2 = { 0.333 };
+            rule.weights = { 1.0 };
+            break;
+        case 3:
+            rule.points_x1 = { 0.167, 0.667, 0.167};
+            rule.points_x2 = { 0.167, 0.167, 0.667 };
+            rule.weights = { 0.3333, 0.3333, 0.3333 };
+            break;
+        case 4:
+            rule.points_x1 = { 0.333, 0.600, 0.200, 0.200 };
+            rule.points_x2 = { 0.333, 0.200, 0.600, 0.200 };
+            rule.weights = { 0.5625, 0.5208, 0.5208, 0.5208 };
+            break;
         default:
             throw std::invalid_argument("Gauss-Legendre quadrature not implemented for this n");
     }

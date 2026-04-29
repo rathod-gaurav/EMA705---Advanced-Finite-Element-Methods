@@ -1,12 +1,12 @@
 #pragma once //include this file only once during compilation
 #include "Mesh.hpp"
 
-template <unsigned int Nsd, unsigned int Nne>
+template <unsigned int Nsd, unsigned int Nne, unsigned int BfOrder>
 class MeshGenerator;
 
 //MeshGenerator for 2D
-template <unsigned int Nne>
-class MeshGenerator<2,Nne>{
+template <unsigned int Nne, unsigned int BfOrder>
+class MeshGenerator<2,Nne, BfOrder>{
     public:
         static constexpr unsigned int Nsd = 2; //2D problem
 
@@ -29,8 +29,8 @@ class MeshGenerator<2,Nne>{
 };
 
 //MeshGenerator for 3D
-template <unsigned int Nne>
-class MeshGenerator<3,Nne>{
+template <unsigned int Nne, unsigned int BfOrder>
+class MeshGenerator<3,Nne,BfOrder>{
     public:
         static constexpr unsigned int Nsd = 3; //3D problem
 

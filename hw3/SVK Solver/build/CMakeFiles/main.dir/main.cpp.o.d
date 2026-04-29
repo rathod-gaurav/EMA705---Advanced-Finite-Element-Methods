@@ -193,6 +193,7 @@ CMakeFiles/main.dir/main.cpp.o: \
  /usr/include/c++/13/bits/fs_dir.h /usr/include/c++/13/bits/fs_ops.h \
  /home/grathod/Downloads/Spring26/EMA705/hw3/SVK\ Solver/include/MeshGenerator.tpp \
  /home/grathod/Downloads/Spring26/EMA705/hw3/SVK\ Solver/include/Quadrature.hpp \
+ /home/grathod/Downloads/Spring26/EMA705/hw3/SVK\ Solver/include/Quadrature.tpp \
  /home/grathod/Downloads/Spring26/EMA705/hw3/SVK\ Solver/include/BoundaryConditions.hpp \
  /usr/include/c++/13/map /usr/include/c++/13/bits/stl_tree.h \
  /usr/include/c++/13/bits/node_handle.h \
