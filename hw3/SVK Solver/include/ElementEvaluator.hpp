@@ -6,7 +6,7 @@
 #include "Quadrature.hpp"
 #include "MaterialModel.hpp"
 
-template <unsigned int Nsd, unsigned int Nne>
+template <unsigned int Nsd, unsigned int Nne, unsigned int BfOrder>
 class ElementEvaluator{
     public:
         ElementEvaluator( //default constructor

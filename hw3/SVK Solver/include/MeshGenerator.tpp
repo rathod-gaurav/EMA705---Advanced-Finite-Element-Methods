@@ -129,7 +129,7 @@ Mesh<2,Nne> MeshGenerator<2,Nne,BfOrder>::buildMesh() const{
                     int n2 = 2*(Nnodes_x1 + i + j*Nnodes_x1 + 1);
                     int n3 = n2 - 2;
                     int n4 = n1 - 1;
-                    int n5 = n1 + (j+1)*Nnodes_x1;
+                    int n5 = n1 + Nnodes_x1;
                     int n6 = n2 - 1;
                     int n7 = n5 - 2;
                     int n8 = n5 - 1;

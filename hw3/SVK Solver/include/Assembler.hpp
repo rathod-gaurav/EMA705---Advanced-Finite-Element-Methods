@@ -7,10 +7,10 @@
 #include <BoundaryConditions.hpp>
 #include <unordered_set>
 
-template <unsigned int Nsd, unsigned int Nne>
+template <unsigned int Nsd, unsigned int Nne, unsigned int BfOrder>
 class Assembler{
     public: 
-        Assembler(const Mesh<Nsd,Nne>& mesh, const ElementEvaluator<Nsd,Nne>& elem_evaluator);
+        Assembler(const Mesh<Nsd,Nne>& mesh, const ElementEvaluator<Nsd,Nne,BfOrder>& elem_evaluator);
 
         void assembleSystem(
             const Eigen::VectorXd& u, //global nodal displacement vector (Nnodes*Nsd x 1 vector)
@@ -35,7 +35,7 @@ class Assembler{
             const std::vector<unsigned int>& cols) const; //function to extract a sparse submatrix from the global stiffness matrix given row and column indexes
     
         const Mesh<Nsd,Nne>& mesh_; //reference to the mesh object
-        const ElementEvaluator<Nsd,Nne>& elem_evaluator_; //reference to the element evaluator object
+        const ElementEvaluator<Nsd,Nne,BfOrder>& elem_evaluator_; //reference to the element evaluator object
 
 
 };

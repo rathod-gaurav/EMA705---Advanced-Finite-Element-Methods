@@ -1,7 +1,7 @@
 #pragma once
 
-template <unsigned int Nsd, unsigned int Nne>
-ElementEvaluator<Nsd, Nne>::ElementEvaluator(
+template <unsigned int Nsd, unsigned int Nne, unsigned int BfOrder>
+ElementEvaluator<Nsd,Nne,BfOrder>::ElementEvaluator(
     const Mesh<Nsd,Nne>& mesh,
     const MaterialModel<Nsd,Nne>& material,
     const QuadratureRule<Nsd,Nne>& quadRule
@@ -11,14 +11,14 @@ ElementEvaluator<Nsd, Nne>::ElementEvaluator(
     quadRule_(quadRule)
 {}
 
-template <unsigned int Nsd, unsigned int Nne>
-typename ElementEvaluator<Nsd,Nne>::MatrixNsd
-ElementEvaluator<Nsd, Nne>::computeJacobian(unsigned int e, const VectorNsd& xi_vec) const{
+template <unsigned int Nsd, unsigned int Nne, unsigned int BfOrder>
+typename ElementEvaluator<Nsd,Nne,BfOrder>::MatrixNsd
+ElementEvaluator<Nsd,Nne,BfOrder>::computeJacobian(unsigned int e, const VectorNsd& xi_vec) const{
     MatrixNsd J = MatrixNsd::Zero();
     
     if constexpr (Nsd == 2){
         for(int A = 0 ; A < Nne ; A++){
-            VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne>::basis_gradient(A, xi_vec);
+            VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne,BfOrder>::basis_gradient(A, xi_vec);
             
             unsigned int Aglobal = mesh_.elements[e].node[A];
             J(0,0) += basis_gradient_vec(0)*mesh_.nodes[Aglobal].x1; //dx1/dxi1
@@ -29,7 +29,7 @@ ElementEvaluator<Nsd, Nne>::computeJacobian(unsigned int e, const VectorNsd& xi_
     }
     else if constexpr (Nsd == 3){
         for(int A = 0 ; A < Nne ; A++){
-            VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne>::basis_gradient(A, xi_vec);
+            VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne,BfOrder>::basis_gradient(A, xi_vec);
             
             unsigned int Aglobal = mesh_.elements[e].node[A];
             J(0,0) += basis_gradient_vec(0)*mesh_.nodes[Aglobal].x1; //dx1/dxi1
@@ -48,15 +48,15 @@ ElementEvaluator<Nsd, Nne>::computeJacobian(unsigned int e, const VectorNsd& xi_
     return J;
 }
 
-template <unsigned int Nsd, unsigned int Nne>
-typename ElementEvaluator<Nsd,Nne>::MatrixNsd
-ElementEvaluator<Nsd, Nne>::computeGradU(const Eigen::VectorXd& u_e, const VectorNsd& xi_vec, const MatrixNsd& JacInv) const {
+template <unsigned int Nsd, unsigned int Nne, unsigned int BfOrder>
+typename ElementEvaluator<Nsd,Nne,BfOrder>::MatrixNsd
+ElementEvaluator<Nsd,Nne,BfOrder>::computeGradU(const Eigen::VectorXd& u_e, const VectorNsd& xi_vec, const MatrixNsd& JacInv) const {
     MatrixNsd grad_u = MatrixNsd::Zero();
     //compute the gradient of the displacement field at the quadrature point using the basis function gradients and the nodal displacements
     
     if constexpr (Nsd == 2){
         for(int A = 0 ; A < Nne ; A++){
-            VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne>::basis_gradient(A, xi_vec);
+            VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne,BfOrder>::basis_gradient(A, xi_vec);
             VectorNsd dN_dx = JacInv.transpose()*basis_gradient_vec;
             
             grad_u(0,0) += dN_dx[0] * u_e(A*Nsd + 0); //du1/dx1
@@ -68,7 +68,7 @@ ElementEvaluator<Nsd, Nne>::computeGradU(const Eigen::VectorXd& u_e, const Vecto
     }
     else if constexpr (Nsd == 3){
         for(int A = 0 ; A < Nne ; A++){
-            VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne>::basis_gradient(A, xi_vec);
+            VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne,BfOrder>::basis_gradient(A, xi_vec);
             VectorNsd dN_dx = JacInv.transpose()*basis_gradient_vec;
             
             grad_u(0,0) += dN_dx[0] * u_e(A*Nsd + 0); //du1/dx1
@@ -87,15 +87,15 @@ ElementEvaluator<Nsd, Nne>::computeGradU(const Eigen::VectorXd& u_e, const Vecto
     return grad_u;
 }
 
-template <unsigned int Nsd, unsigned int Nne>
-void ElementEvaluator<Nsd, Nne>::computeElement(
+template <unsigned int Nsd, unsigned int Nne, unsigned int BfOrder>
+void ElementEvaluator<Nsd,Nne,BfOrder>::computeElement(
     unsigned int e, //element index
     const Eigen::VectorXd& u_e, //element nodal displacements (Nne*3 x 1 vector)
     Eigen::MatrixXd& Klocal, //element stiffness matrix (Nne*3 x Nne*3 matrix)
     Eigen::VectorXd& Rlocal //element internal force vector (Nne*3 x 1 vector)
 ) const {
     Rlocal = Eigen::VectorXd::Zero(Nne * Nsd); //local residual vector for the element
-    Klocal = Eigen::MatrixXd::Zero(Nne * Nsd, Nne * Nsd); //local tangent stiffness matrix for the element
+    Klocal = Eigen::MatrixXd::Zero(Nne * Nsd,Nne * Nsd); //local tangent stiffness matrix for the element
 
     MatrixNsd S = MatrixNsd::Zero(); //Second Piola-Kirchhoff stress tensor
     MatrixNsd P = MatrixNsd::Zero(); //First Piola-Kirchhoff stress tensor
@@ -128,7 +128,7 @@ void ElementEvaluator<Nsd, Nne>::computeElement(
                 material_.compute(F, S, P, C_mat); //compute the stress tensors E,S,P and material tangent stiffness matrix at the quadrature point using the material model
                 
                 for(int B = 0 ; B < Nne ; B++){//Loop to calculate Residual
-                    VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne>::basis_gradient(B, xi_vec);
+                    VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne,BfOrder>::basis_gradient(B, xi_vec);
                     VectorNsd dN_dx = JacInv.transpose()*basis_gradient_vec;
                     
                     Rlocal.segment(B*Nsd, Nsd) += P * dN_dx * weight * JacDet; //contribution to the local residual vector
@@ -137,13 +137,13 @@ void ElementEvaluator<Nsd, Nne>::computeElement(
                 // cout << "Calculated Rlocal for element " << e+1 << "/" << Nel_t << "\r";
                 
                 for(int A = 0 ; A < Nne ; A++){//Loops to calculate tangent matrix
-                    VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne>::basis_gradient(A, xi_vec);
+                    VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne,BfOrder>::basis_gradient(A, xi_vec);
                     VectorNsd dNA_dx = JacInv.transpose()*basis_gradient_vec;
                     
                     
                     
                     for(int B = 0 ; B < Nne ; B++){
-                        VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne>::basis_gradient(B, xi_vec);
+                        VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne,BfOrder>::basis_gradient(B, xi_vec);
                         VectorNsd dNB_dx = JacInv.transpose()*basis_gradient_vec;
                         
 
@@ -181,7 +181,7 @@ void ElementEvaluator<Nsd, Nne>::computeElement(
                 
             }
         }
-        else if constexpr (Nne == 4){
+        else if constexpr (Nne == 4 || Nne == 9){
             const auto& quad_points = quadRule_.points;
             const auto& quad_weights = quadRule_.weights;
             unsigned int quadOrder = quad_points.size(); //number of quadrature points in each direction
@@ -206,7 +206,7 @@ void ElementEvaluator<Nsd, Nne>::computeElement(
                     material_.compute(F, S, P, C_mat); //compute the stress tensors E,S,P and material tangent stiffness matrix at the quadrature point using the material model
                     
                     for(int B = 0 ; B < Nne ; B++){//Loop to calculate Residual
-                        VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne>::basis_gradient(B, xi_vec);
+                        VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne,BfOrder>::basis_gradient(B, xi_vec);
                         VectorNsd dN_dx = JacInv.transpose()*basis_gradient_vec;
                         
                         Rlocal.segment(B*Nsd, Nsd) += P * dN_dx * weight * JacDet; //contribution to the local residual vector
@@ -215,13 +215,13 @@ void ElementEvaluator<Nsd, Nne>::computeElement(
                     // cout << "Calculated Rlocal for element " << e+1 << "/" << Nel_t << "\r";
                     
                     for(int A = 0 ; A < Nne ; A++){//Loops to calculate tangent matrix
-                        VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne>::basis_gradient(A, xi_vec);
+                        VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne,BfOrder>::basis_gradient(A, xi_vec);
                         VectorNsd dNA_dx = JacInv.transpose()*basis_gradient_vec;
                         
                         
                         
                         for(int B = 0 ; B < Nne ; B++){
-                            VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne>::basis_gradient(B, xi_vec);
+                            VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne,BfOrder>::basis_gradient(B, xi_vec);
                             VectorNsd dNB_dx = JacInv.transpose()*basis_gradient_vec;
                             
 
@@ -290,7 +290,7 @@ void ElementEvaluator<Nsd, Nne>::computeElement(
                     
                     
                     for(int B = 0 ; B < Nne ; B++){//Loop to calculate Residual
-                        VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne>::basis_gradient(B, xi_vec);
+                        VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne,BfOrder>::basis_gradient(B, xi_vec);
                         VectorNsd dN_dx = JacInv.transpose()*basis_gradient_vec;
                         
                         Rlocal.segment(B*Nsd, Nsd) += P * dN_dx * weight * JacDet; //contribution to the local residual vector
@@ -299,13 +299,13 @@ void ElementEvaluator<Nsd, Nne>::computeElement(
                     // cout << "Calculated Rlocal for element " << e+1 << "/" << Nel_t << "\r";
                     
                     for(int A = 0 ; A < Nne ; A++){//Loops to calculate tangent matrix
-                        VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne>::basis_gradient(A, xi_vec);
+                        VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne,BfOrder>::basis_gradient(A, xi_vec);
                         VectorNsd dNA_dx = JacInv.transpose()*basis_gradient_vec;
                         
                         
                         
                         for(int B = 0 ; B < Nne ; B++){
-                            VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne>::basis_gradient(B, xi_vec);
+                            VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne,BfOrder>::basis_gradient(B, xi_vec);
                             VectorNsd dNB_dx = JacInv.transpose()*basis_gradient_vec;
                             
 

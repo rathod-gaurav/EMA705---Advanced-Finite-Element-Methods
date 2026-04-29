@@ -6,7 +6,7 @@ class MeshGenerator;
 
 //MeshGenerator for 2D
 template <unsigned int Nne, unsigned int BfOrder>
-class MeshGenerator<2,Nne, BfOrder>{
+class MeshGenerator<2,Nne,BfOrder>{
     public:
         static constexpr unsigned int Nsd = 2; //2D problem
 

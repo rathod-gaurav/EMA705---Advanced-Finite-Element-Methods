@@ -1,14 +1,14 @@
 #pragma once //include this only once during compilation
 
-template <unsigned int Nsd, unsigned int Nne>
-NonlinearSolver<Nsd, Nne>::NonlinearSolver(double tol, unsigned int maxIncr, unsigned int maxIter)
+template <unsigned int Nsd, unsigned int Nne, unsigned int BfOrder>
+NonlinearSolver<Nsd,Nne,BfOrder>::NonlinearSolver(double tol, unsigned int maxIncr, unsigned int maxIter)
     : tol_(tol), maxIncr_(maxIncr), maxIter_(maxIter)
 {}
 
-template <unsigned int Nsd, unsigned int Nne>
-void NonlinearSolver<Nsd, Nne>::solve(
+template <unsigned int Nsd, unsigned int Nne, unsigned int BfOrder>
+void NonlinearSolver<Nsd,Nne,BfOrder>::solve(
     Eigen::VectorXd& u, //displacement vector, modified in place
-    const Assembler<Nsd, Nne>& assembler, //provides Kglobal, Rglobal
+    const Assembler<Nsd,Nne,BfOrder>& assembler, //provides Kglobal, Rglobal
     const BoundaryConditions<Nsd,Nne>& bcs, //provides dirischlet indexes and values
     std::function<void(unsigned int, unsigned int, double)> iterCallback
 ){
@@ -33,7 +33,8 @@ void NonlinearSolver<Nsd, Nne>::solve(
             linear_solver.factorize(KUU);
             if(linear_solver.info() != Eigen::Success) {
                 std::cout << "Decomposition failed for incr " << incr+1 << ", iteration " << iter+1 << "\n";
-                return;
+                
+                throw std::runtime_error("KUU Matrix decomposition failed");
             }
 
             // std::cout << "Initilised solver for incr " << incr+1 << ", iteration " << iter+1 << "\n";

@@ -22,8 +22,8 @@ int main(){
 
     //Problem parameters
     constexpr unsigned int Nsd = 2; // 3 for 3D problem
-    constexpr unsigned int BfOrder = 2; // 1 for linear , 2 for quadratic
-    constexpr unsigned int Nne = 9; //8 for hexahedral elements | 8 nodes per element
+    constexpr unsigned int BfOrder = 1; // 1 for linear , 2 for quadratic
+    constexpr unsigned int Nne = 3; //8 for hexahedral elements | 8 nodes per element
 
     //Quadrature order
     unsigned int quadOrder = 1; //number of quadrature points in each direction for
@@ -43,13 +43,13 @@ int main(){
     // double x3_ll = 0.0, x3_ul = 0.03; //lower and upper limits in x3 direction
     
     //Mesh parameters
-    unsigned int Nel_x1 = 3; //number of elements in x1 direction
-    unsigned int Nel_x2 = 2; //number of elements in x2 direction
+    unsigned int Nel_x1 = 1; //number of elements in x1 direction
+    unsigned int Nel_x2 = 1; //number of elements in x2 direction
     // unsigned int Nel_x3 = 12; //number of elements in x3 direction
 
     //Generate the mesh using the MeshGenerator class
     MeshGenerator<Nsd,Nne,BfOrder> meshGen(x1_ll, x1_ul, x2_ll, x2_ul, Nel_x1, Nel_x2);
-    // MeshGenerator<Nsd,Nne> meshGen(x1_ll, x1_ul, x2_ll, x2_ul, x3_ll, x3_ul, Nel_x1, Nel_x2, Nel_x3);
+    // MeshGenerator<Nsd,Nne,BfOrder> meshGen(x1_ll, x1_ul, x2_ll, x2_ul, x3_ll, x3_ul, Nel_x1, Nel_x2, Nel_x3);
     Mesh<Nsd,Nne> mesh = meshGen.buildMesh();
 
     //Write the mesh into files ###### see if this can be made an asynchronous operation in the future to speed up the code
@@ -74,27 +74,10 @@ int main(){
         // }
 
         // Fig1(b)
-        // if(mesh.nodes[i].x2 == x2_ll){ //if the node is on the left face of the domain
-        //     bcs.addDirischlet(i, 0, 0.0); //apply dirischlet boundary condition u1 = 0 at this node
-        //     bcs.addDirischlet(i, 1, 0.0); //apply dirischlet boundary condition u1 = 0 at this node
-        //     // bcs.addDirischlet(i, 2, 0.0); //apply dirischlet boundary condition u1 = 0 at this node
-        // }
-        // if(mesh.nodes[i].x2 == x2_ul){ //if the node is on the right face of the domain
-        //     if(mesh.nodes[i].x1 == x1_ul){
-        //         bcs.addDirischlet(i, 0, 0.0007071068); //apply dirischlet boundary condition u1 = 0.001 at this node
-        //         bcs.addDirischlet(i, 1, 0.0007071068); //apply dirischlet boundary condition u1 = 0.001 at this node
-        //     }
-        // }
-
-        // Fig1(c)
         if(mesh.nodes[i].x2 == x2_ll){ //if the node is on the left face of the domain
             bcs.addDirischlet(i, 0, 0.0); //apply dirischlet boundary condition u1 = 0 at this node
             bcs.addDirischlet(i, 1, 0.0); //apply dirischlet boundary condition u1 = 0 at this node
             // bcs.addDirischlet(i, 2, 0.0); //apply dirischlet boundary condition u1 = 0 at this node
-        }
-        if(mesh.nodes[i].x1 == x1_ll){ //if the node is on the right face of the domain
-            bcs.addDirischlet(i, 0, 0.0); //apply dirischlet boundary condition u1 = 0.001 at this node
-            bcs.addDirischlet(i, 1, 0.0); //apply dirischlet boundary condition u1 = 0.001 at this node
         }
         if(mesh.nodes[i].x2 == x2_ul){ //if the node is on the right face of the domain
             if(mesh.nodes[i].x1 == x1_ul){
@@ -102,6 +85,23 @@ int main(){
                 bcs.addDirischlet(i, 1, 0.0007071068); //apply dirischlet boundary condition u1 = 0.001 at this node
             }
         }
+
+        // Fig1(c)
+        // if(mesh.nodes[i].x2 == x2_ll){ //if the node is on the left face of the domain
+        //     bcs.addDirischlet(i, 0, 0.0); //apply dirischlet boundary condition u1 = 0 at this node
+        //     bcs.addDirischlet(i, 1, 0.0); //apply dirischlet boundary condition u1 = 0 at this node
+        //     // bcs.addDirischlet(i, 2, 0.0); //apply dirischlet boundary condition u1 = 0 at this node
+        // }
+        // if(mesh.nodes[i].x1 == x1_ll){ //if the node is on the right face of the domain
+        //     bcs.addDirischlet(i, 0, 0.0); //apply dirischlet boundary condition u1 = 0.001 at this node
+        //     bcs.addDirischlet(i, 1, 0.0); //apply dirischlet boundary condition u1 = 0.001 at this node
+        // }
+        // if(mesh.nodes[i].x2 == x2_ul){ //if the node is on the right face of the domain
+        //     if(mesh.nodes[i].x1 == x1_ul){
+        //         bcs.addDirischlet(i, 0, 0.0007071068); //apply dirischlet boundary condition u1 = 0.001 at this node
+        //         bcs.addDirischlet(i, 1, 0.0007071068); //apply dirischlet boundary condition u1 = 0.001 at this node
+        //     }
+        // }
     }
     bcs.buildBCs(); //finalize the boundary conditions
     bcs.printSummary(); //print a summary of the boundary conditions
@@ -109,13 +109,13 @@ int main(){
 
 
     //Problem physics stack
-    QuadratureRule<Nsd, Nne>    quadRule = Quadrature<Nsd,Nne>::gauss_legendre(quadOrder); //get the quadrature points and weights for the specified quadrature order
-    StVenantKirchhoff<Nsd,Nne>  material(lambda, mu); //create an instance of the St. Venant-Kirchhoff material model with the specified Lamé parameters
-    ElementEvaluator<Nsd, Nne>  elemEval(mesh, material, quadRule); //create an instance of element evaluator with the mesh, material model, and quadrature rule
-    Assembler<Nsd, Nne>         assembler(mesh, elemEval); //create an instance of the assembler with the mesh and element evaluator
-    OutputWriter<Nsd, Nne>      writer("solutions"); //create an instance of the output writer to write results to the "output" directory
+    QuadratureRule<Nsd,Nne>            quadRule = Quadrature<Nsd,Nne>::gauss_legendre(quadOrder); //get the quadrature points and weights for the specified quadrature order
+    StVenantKirchhoff<Nsd,Nne>         material(lambda, mu); //create an instance of the St. Venant-Kirchhoff material model with the specified Lamé parameters
+    ElementEvaluator<Nsd,Nne,BfOrder>  elemEval(mesh, material, quadRule); //create an instance of element evaluator with the mesh, material model, and quadrature rule
+    Assembler<Nsd,Nne,BfOrder>         assembler(mesh, elemEval); //create an instance of the assembler with the mesh and element evaluator
+    OutputWriter<Nsd, Nne>             writer("solutions"); //create an instance of the output writer to write results to the "output" directory
 
-    NonlinearSolver<Nsd, Nne>   solver(tol, maxIncr, maxIter); //create an instance of the nonlinear solver with a tolerance of 1e-6, maximum 10 increments, and maximum 20 iterations per increment
+    NonlinearSolver<Nsd,Nne,BfOrder>   solver(tol, maxIncr, maxIter); //create an instance of the nonlinear solver with a tolerance of 1e-6, maximum 10 increments, and maximum 20 iterations per increment
 
     Eigen::VectorXd u = Eigen::VectorXd::Zero(mesh.Nnodes()*Nsd); //initialize the global displacement vector to zero
 

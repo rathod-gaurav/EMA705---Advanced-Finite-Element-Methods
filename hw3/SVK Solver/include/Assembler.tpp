@@ -1,13 +1,13 @@
 #pragma once //include this only once during compilation
 
-template <unsigned int Nsd, unsigned int Nne>
-Assembler<Nsd,Nne>::Assembler(
-    const Mesh<Nsd,Nne>& mesh, const ElementEvaluator<Nsd,Nne>& elem_evaluator
+template <unsigned int Nsd, unsigned int Nne, unsigned int BfOrder>
+Assembler<Nsd,Nne,BfOrder>::Assembler(
+    const Mesh<Nsd,Nne>& mesh, const ElementEvaluator<Nsd,Nne,BfOrder>& elem_evaluator
 ) : mesh_(mesh), elem_evaluator_(elem_evaluator)
 {}
 
-template <unsigned int Nsd, unsigned int Nne>
-Eigen::SparseMatrix<double> Assembler<Nsd,Nne>::extractSparseSubmatrix(
+template <unsigned int Nsd, unsigned int Nne, unsigned int BfOrder>
+Eigen::SparseMatrix<double> Assembler<Nsd,Nne,BfOrder>::extractSparseSubmatrix(
     const Eigen::SparseMatrix<double>& K,
     const std::vector<unsigned int>& rows,
     const std::vector<unsigned int>& cols) const {
@@ -37,8 +37,8 @@ Eigen::SparseMatrix<double> Assembler<Nsd,Nne>::extractSparseSubmatrix(
     return sub;
 }
 
-template <unsigned int Nsd, unsigned int Nne>
-void Assembler<Nsd,Nne>::assembleSystem(
+template <unsigned int Nsd, unsigned int Nne, unsigned int BfOrder>
+void Assembler<Nsd,Nne,BfOrder>::assembleSystem(
             const Eigen::VectorXd& u, //global nodal displacement vector (Nnodes*Nsd x 1 vector)
             Eigen::SparseMatrix<double>& Kglobal, //global stiffness matrix (Nnodes*Nsd x Nnodes*Nsd sparse matrix)
             Eigen::VectorXd& Rglobal //global internal force vector (Nnodes*Nsd x 1 vector)
@@ -49,7 +49,7 @@ void Assembler<Nsd,Nne>::assembleSystem(
     Rglobal = Eigen::VectorXd::Zero(Nt * Nsd); //residual vector initialized to zero
     Kglobal = Eigen::SparseMatrix<double>(Nt * Nsd, Nt * Nsd); //sparse version of the tangent stiffness matrix for solving linear systems
     std::vector<Eigen::Triplet<double>> Kglobal_triplets; //triplet format for constructing the sparse tangent stiffness matrix
-    Kglobal_triplets.reserve(Nel_t*Nne*Nne*9); //reserve space for triplets to avoid dynamic resizing during assembly
+    // Kglobal_triplets.reserve(Nel_t*Nne*Nne*9); //reserve space for triplets to avoid dynamic resizing during assembly
 
     Eigen::MatrixXd Klocal = Eigen::MatrixXd::Zero(Nne * Nsd, Nne * Nsd); //local tangent stiffness matrix for the element
     Eigen::VectorXd Rlocal = Eigen::VectorXd::Zero(Nne * Nsd); //local residual vector for the element
@@ -83,15 +83,15 @@ void Assembler<Nsd,Nne>::assembleSystem(
                 }
             }
             Rglobal.segment(Nsd*Aglobal,Nsd) += Rlocal.segment(Nsd*A,Nsd);
-            // cout << "Assembled element " << e+1 << "/" << Nel_t << "\r";
+            // std::cout << "Assembled element " << e+1 << "/" << Nel_t << std::endl;
         }
     }
     Kglobal.setFromTriplets(Kglobal_triplets.begin(), Kglobal_triplets.end()); //construct the sparse global tangent stiffness matrix from the triplets
     Kglobal.makeCompressed(); //compress the sparse matrix for efficient arithmetic and solving
 }
 
-template <unsigned int Nsd, unsigned int Nne>
-void Assembler<Nsd,Nne>::partition(
+template <unsigned int Nsd, unsigned int Nne, unsigned int BfOrder>
+void Assembler<Nsd,Nne,BfOrder>::partition(
     const Eigen::SparseMatrix<double>& Kglobal, //global stiffness matrix (Nnodes*Nsd x Nnodes*Nsd sparse matrix)
     Eigen::VectorXd& Rglobal, //global internal force vector (Nnodes*Nsd x 1 vector)
     const BoundaryConditions<Nsd,Nne>& bcs, //boundary conditions object containing the indexes of the dirischlet DOFs

@@ -144,7 +144,11 @@ std::string OutputWriter<Nsd, Nne>::writeVTU(
     constexpr int vtkType = []() constexpr {
         if constexpr (Nne == 3)  return 5;  // VTK_TRIANGLE
         if constexpr (Nne == 4)  return 9;  // VTK_QUAD
-        if constexpr (Nne == 8)  return 12; // VTK_HEXAHEDRON
+        if constexpr (Nne == 8)  {
+            if constexpr (Nsd == 2) return 23; // VTK_QUADRATIC_QUAD
+            else return 12; // VTK_HEXAHEDRON
+        }
+        if constexpr (Nne == 9) return 28; // VTK_BIQUADRATIC_QUAD
         if constexpr (Nne == 27) return 29; // VTK_BIQUADRATIC_HEXAHEDRON
         return 1; // Default
     }();
