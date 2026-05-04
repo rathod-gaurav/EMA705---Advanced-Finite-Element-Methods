@@ -1,4 +1,4 @@
-// Linear Elliptic PDE with vector variable - 3D elasto statics
+// Linear Elliptic PDE with vector variable - 2D elasto statics
 // no body forces, no neumann conditions, only dirischlet boundary conditions at top and bottom faces of the domain
 
 #include <iostream>
@@ -435,10 +435,8 @@ int main(){
     unsigned int quadRule = 2; //quadrature rule for numerical integration
 
     //problem variables
-    float E = 1e3;
-    float nu = 0.3;
-    float mu = (E*nu)/((1 + nu)*(1 - 2*nu));
-    float lambda = E/(2*(1 + nu));
+    float lambda = 9.15e12;
+    float mu = 1.83e10;
 
     //domain
     float x1_ll = 0.0;
