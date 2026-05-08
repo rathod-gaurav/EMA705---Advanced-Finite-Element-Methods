@@ -1,0 +1,5 @@
+CompileFlags:
+  Add:
+    - -I/home/grathod/Downloads/Spring26/EMA705/hw3/SVK Solver/include
+    - -I/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0
+    - -std=c++17
