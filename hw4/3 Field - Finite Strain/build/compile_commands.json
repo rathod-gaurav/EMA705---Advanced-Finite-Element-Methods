@@ -1,8 +1,0 @@
-[
-{
-  "directory": "/home/grathod/Downloads/Spring26/EMA705/hw4/3 Field - Finite Strain/build",
-  "command": "/usr/bin/c++  -I\"/home/grathod/Downloads/Spring26/EMA705/hw4/3 Field - Finite Strain/include\" -I/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0  -O3 -g -march=native -std=gnu++17 -o CMakeFiles/main.dir/main.cpp.o -c \"/home/grathod/Downloads/Spring26/EMA705/hw4/3 Field - Finite Strain/main.cpp\"",
-  "file": "/home/grathod/Downloads/Spring26/EMA705/hw4/3 Field - Finite Strain/main.cpp",
-  "output": "CMakeFiles/main.dir/main.cpp.o"
-}
-]
