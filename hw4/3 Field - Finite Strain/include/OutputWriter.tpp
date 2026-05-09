@@ -98,6 +98,8 @@ template<unsigned int Nsd, unsigned int Nne>
 std::string OutputWriter<Nsd, Nne>::writeVTU(
     const Mesh<Nsd, Nne>& mesh,
     const Eigen::VectorXd& u,
+    const Eigen::VectorXd& C,
+    const Eigen::VectorXd& T,
     unsigned int incr
 ){
     std::string filename = outputDir_ + "/solution_" + std::to_string(incr + 1) + ".vtu";
@@ -158,16 +160,30 @@ std::string OutputWriter<Nsd, Nne>::writeVTU(
     }
     file << "\n</DataArray>\n</Cells>\n";
 
-    // --- Point Data (Displacement) ---
+    // --- Point Data (Displacement, Concentration, Temperature) ---
     // ParaView requires 3 components for vectors, even in 2D
-    file << "<PointData Vectors=\"Displacement\">\n"
+    file << "<PointData Vectors=\"Displacement\" Scalars=\"Concentration\">\n"
          << "<DataArray type=\"Float32\" Name=\"Displacement\" NumberOfComponents=\"3\" format=\"ascii\">\n";
     for (unsigned int i = 0; i < Nn; ++i) {
         file << u(Nsd * i) << " " << u(Nsd * i + 1) << " ";
         if constexpr (Nsd == 3) file << u(Nsd * i + 2) << "\n";
         else                    file << "0.0\n";
     }
-    file << "</DataArray>\n</PointData>\n";
+    file << "</DataArray>\n";
+
+    // --- Concentration (scalar) ---
+    file << "<DataArray type=\"Float32\" Name=\"Concentration\" NumberOfComponents=\"1\" format=\"ascii\">\n";
+    for (unsigned int i = 0; i < Nn; ++i)
+        file << C(i) << "\n";
+    file << "</DataArray>\n";
+
+    // --- Temperature (scalar) ---
+    file << "<DataArray type=\"Float32\" Name=\"Temperature\" NumberOfComponents=\"1\" format=\"ascii\">\n";
+    for (unsigned int i = 0; i < Nn; ++i)
+        file << T(i) << "\n";
+    file << "</DataArray>\n";
+
+    file << "</PointData>\n";
 
     file << "</Piece>\n</UnstructuredGrid>\n</VTKFile>\n";
 

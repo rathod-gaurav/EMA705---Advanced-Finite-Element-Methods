@@ -1,33 +1,123 @@
 <?xml version="1.0"?>
 <VTKFile type="UnstructuredGrid" version="0.1" byte_order="LittleEndian">
 <UnstructuredGrid>
-<Piece NumberOfPoints="4" NumberOfCells="2">
+<Piece NumberOfPoints="21" NumberOfCells="12">
 <Points>
 <DataArray type="Float32" NumberOfComponents="3" format="ascii">
 0 0 0.0
+0.00333333 0 0.0
+0.00666667 0 0.0
 0.01 0 0.0
+0.0133333 0 0.0
+0.0166667 0 0.0
+0.02 0 0.0
+0 0.005 0.0
+0.00333333 0.005 0.0
+0.00666667 0.005 0.0
+0.01 0.005 0.0
+0.0133333 0.005 0.0
+0.0166667 0.005 0.0
+0.02 0.005 0.0
 0 0.01 0.0
+0.00333333 0.01 0.0
+0.00666667 0.01 0.0
 0.01 0.01 0.0
+0.0133333 0.01 0.0
+0.0166667 0.01 0.0
+0.02 0.01 0.0
 </DataArray>
 </Points>
 <Cells>
 <DataArray type="Int32" Name="connectivity" format="ascii">
-0 1 2 
-1 3 2 
+0 1 8 7 
+1 2 9 8 
+2 3 10 9 
+3 4 11 10 
+4 5 12 11 
+5 6 13 12 
+7 8 15 14 
+8 9 16 15 
+9 10 17 16 
+10 11 18 17 
+11 12 19 18 
+12 13 20 19 
 </DataArray>
 <DataArray type="Int32" Name="offsets" format="ascii">
-3 6 
+4 8 12 16 20 24 28 32 36 40 44 48 
 </DataArray>
 <DataArray type="UInt8" Name="types" format="ascii">
-5 5 
+9 9 9 9 9 9 9 9 9 9 9 9 
 </DataArray>
 </Cells>
-<PointData Vectors="Displacement">
+<PointData Vectors="Displacement" Scalars="Concentration">
 <DataArray type="Float32" Name="Displacement" NumberOfComponents="3" format="ascii">
 0 0 0.0
 0 0 0.0
-0.000349309 0.000136968 0.0
-0.000311127 0.000311127 0.0
+0 0 0.0
+0 0 0.0
+0 0 0.0
+0 0 0.0
+0.001 0 0.0
+0 0 0.0
+9.04727e-05 1.2826e-05 0.0
+0.000198598 -1.14304e-05 0.0
+0.000331699 -5.59295e-05 0.0
+0.000521651 -0.000144879 0.0
+0.000821446 -0.000358139 0.0
+0.001 -0.000511439 0.0
+0 0 0.0
+0.000156957 -6.96732e-05 0.0
+0.000332641 -0.000110309 0.0
+0.000528493 -0.000192306 0.0
+0.000734309 -0.00034671 0.0
+0.000873686 -0.000491955 0.0
+0.001 -0.000539681 0.0
+</DataArray>
+<DataArray type="Float32" Name="Concentration" NumberOfComponents="1" format="ascii">
+-0.00102782
+-0.00102777
+-0.0010276
+-0.00102732
+-0.00102716
+-0.00102741
+-0.00102818
+0.489216
+0.489218
+0.489225
+0.48923
+0.489225
+0.4892
+0.489133
+0.998972
+0.998972
+0.998972
+0.998973
+0.998973
+0.998973
+0.998972
+</DataArray>
+<DataArray type="Float32" Name="Temperature" NumberOfComponents="1" format="ascii">
+0.000339542
+0.00936745
+0.0490908
+0.151198
+0.347549
+0.644208
+0.996639
+0.000252284
+0.00928019
+0.0490037
+0.151112
+0.347467
+0.644144
+0.99664
+0.000158806
+0.00918671
+0.0489104
+0.15102
+0.347379
+0.644075
+0.996639
 </DataArray>
 </PointData>
 </Piece>

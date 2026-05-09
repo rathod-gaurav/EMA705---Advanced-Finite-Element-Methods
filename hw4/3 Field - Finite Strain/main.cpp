@@ -2,6 +2,7 @@
 #include "MeshGenerator.hpp"
 #include "Quadrature.hpp"
 #include "BoundaryConditions.hpp"
+#include "BoundaryConditionsScalar.hpp"
 #include "ElementEvaluator.hpp"
 #include "DiffusionEvaluator.hpp"
 #include "StVenantKirchhoff.hpp"
@@ -24,10 +25,10 @@ int main(){
     //Problem parameters
     constexpr unsigned int Nsd = 2; // 3 for 3D problem
     constexpr unsigned int BfOrder = 1; // 1 for linear , 2 for quadratic
-    constexpr unsigned int Nne = 3; //8 for hexahedral elements | 8 nodes per element
+    constexpr unsigned int Nne = 4; //8 for hexahedral elements | 8 nodes per element
 
     //Quadrature order
-    unsigned int quadOrder = 1; //number of quadrature points in each direction for
+    unsigned int quadOrder = 2; //number of quadrature points in each direction for
 
     //Problem parameters
     double E = 1.0; //Young's modulus //N/m2
@@ -40,18 +41,21 @@ int main(){
     double DT = 1.0; //thermal conductivity W/mK
 
     //Solver parameters
+    double dt = 1e-6; //time step size for the diffusion equations
+    unsigned int maxTimeSteps = 50; //maximum number of time steps for the diffusion equations
+
     double tol = 1e-6; //tolerance for convergence of the nonlinear solver
-    unsigned int maxIncr = 50; //maximum number of increments (timesteps)
+    unsigned int maxIncr = 1; //maximum number of increments //must be 1 always///
     unsigned int maxIter = 20; //maximum number of iterations per increment
 
     //Domain parameters
-    double x1_ll = 0.0, x1_ul = 0.01; //lower and upper limits in x1 direction
+    double x1_ll = 0.0, x1_ul = 0.02; //lower and upper limits in x1 direction
     double x2_ll = 0.0, x2_ul = 0.01; //lower and upper limits in x2 direction
     // double x3_ll = 0.0, x3_ul = 0.03; //lower and upper limits in x3 direction
     
     //Mesh parameters
-    unsigned int Nel_x1 = 1; //number of elements in x1 direction
-    unsigned int Nel_x2 = 1; //number of elements in x2 direction
+    unsigned int Nel_x1 = 6; //number of elements in x1 direction
+    unsigned int Nel_x2 = 2; //number of elements in x2 direction
     // unsigned int Nel_x3 = 12; //number of elements in x3 direction
 
     //Generate the mesh using the MeshGenerator class
@@ -65,65 +69,65 @@ int main(){
     std::cout << "Mesh built: " << mesh.Nnodes() << " nodes, " << mesh.Nelements() << " elements" << std::endl;
     std::cout << "--------------------" << std::endl;
 
-    //Boundary conditions
+    //Boundary conditions on u
     BoundaryConditions<Nsd,Nne> bcs(mesh);
     for(unsigned int i = 0 ; i < mesh.Nnodes() ; i++){
-        // Fig1(a)
-        // if(mesh.nodes[i].x2 == x2_ll){ //if the node is on the left face of the domain
-        //     bcs.addDirischlet(i, 0, 0.0); //apply dirischlet boundary condition u1 = 0 at this node
-        //     bcs.addDirischlet(i, 1, 0.0); //apply dirischlet boundary condition u1 = 0 at this node
-        //     // bcs.addDirischlet(i, 2, 0.0); //apply dirischlet boundary condition u1 = 0 at this node
-        // }
-        // if(mesh.nodes[i].x2 == x2_ul){ //if the node is on the right face of the domain
-        //     if(mesh.nodes[i].x1 == x1_ul){
-        //         bcs.addDirischlet(i, 0, 0.001); //apply dirischlet boundary condition u1 = 0.001 at this node
-        //     }
-        // }
-
-        // Fig1(b)
         if(mesh.nodes[i].x2 == x2_ll){ //if the node is on the left face of the domain
             bcs.addDirischlet(i, 0, 0.0); //apply dirischlet boundary condition u1 = 0 at this node
-            bcs.addDirischlet(i, 1, 0.0); //apply dirischlet boundary condition u1 = 0 at this node
-            // bcs.addDirischlet(i, 2, 0.0); //apply dirischlet boundary condition u1 = 0 at this node
+            bcs.addDirischlet(i, 1, 0.0); 
+            // bcs.addDirischlet(i, 2, 0.0); 
         }
-        if(mesh.nodes[i].x2 == x2_ul){ //if the node is on the right face of the domain
-            if(mesh.nodes[i].x1 == x1_ul){
-                bcs.addDirischlet(i, 0, 0.0007071068); //apply dirischlet boundary condition u1 = 0.001 at this node
-                bcs.addDirischlet(i, 1, 0.0007071068); //apply dirischlet boundary condition u1 = 0.001 at this node
-            }
+        if(mesh.nodes[i].x1 == x1_ll){ //if the node is on the right face of the domain
+            bcs.addDirischlet(i, 0, 0.0);
+            bcs.addDirischlet(i, 1, 0.0);
+            // bcs.addDirischlet(i, 2, 0.0); 
         }
-
-        // Fig1(c)
-        // if(mesh.nodes[i].x2 == x2_ll){ //if the node is on the left face of the domain
-        //     bcs.addDirischlet(i, 0, 0.0); //apply dirischlet boundary condition u1 = 0 at this node
-        //     bcs.addDirischlet(i, 1, 0.0); //apply dirischlet boundary condition u1 = 0 at this node
-        //     // bcs.addDirischlet(i, 2, 0.0); //apply dirischlet boundary condition u1 = 0 at this node
-        // }
-        // if(mesh.nodes[i].x1 == x1_ll){ //if the node is on the right face of the domain
-        //     bcs.addDirischlet(i, 0, 0.0); //apply dirischlet boundary condition u1 = 0.001 at this node
-        //     bcs.addDirischlet(i, 1, 0.0); //apply dirischlet boundary condition u1 = 0.001 at this node
-        // }
-        // if(mesh.nodes[i].x2 == x2_ul){ //if the node is on the right face of the domain
-        //     if(mesh.nodes[i].x1 == x1_ul){
-        //         bcs.addDirischlet(i, 0, 0.0007071068); //apply dirischlet boundary condition u1 = 0.001 at this node
-        //         bcs.addDirischlet(i, 1, 0.0007071068); //apply dirischlet boundary condition u1 = 0.001 at this node
-        //     }
-        // }
+        if(mesh.nodes[i].x1 == x1_ul){ //if the node is on the right face of the domain
+            bcs.addDirischlet(i, 0, 0.001);
+        }
     }
     bcs.buildBCs(); //finalize the boundary conditions
+    std::cout << "Boundary conditions on u:" << std::endl;
     bcs.printSummary(); //print a summary of the boundary conditions
+    std::cout << "--------------------" << std::endl;
+
+    //Boundary conditions on C
+    BoundaryConditionsScalar<Nsd,Nne> bcs_C(mesh);
+    for(unsigned int i = 0 ; i < mesh.Nnodes() ; i++){
+        if(mesh.nodes[i].x2 == x2_ll){ //if the node is on the left face of the domain
+            bcs_C.addDirischlet(i, 0, 0.0); //apply dirischlet boundary condition C = 1 at this node
+        }
+        if(mesh.nodes[i].x2 == x2_ul){ //if the node is on the right face of the domain
+            bcs_C.addDirischlet(i, 0, 1.0); //apply dirischlet boundary condition C = 0 at this node
+        }
+    }
+    bcs_C.buildBCs(); //finalize the boundary conditions
+    std::cout << "Boundary conditions on C:" << std::endl;
+    bcs_C.printSummary(); //print a summary of the boundary conditions
+    std::cout << "--------------------" << std::endl;
+
+    //Boundary conditions on T
+    BoundaryConditionsScalar<Nsd,Nne> bcs_T(mesh);
+    for(unsigned int i = 0 ; i < mesh.Nnodes() ; i++){
+        if(mesh.nodes[i].x1 == x1_ul){ //if the node is on the right face of the domain
+            bcs_T.addDirischlet(i, 0, 1.0); //apply dirischlet boundary condition T = 1 at this node
+        }
+    }
+    bcs_T.buildBCs(); //finalize the boundary conditions
+    std::cout << "Boundary conditions on T:" << std::endl;
+    bcs_T.printSummary(); //print a summary of the boundary conditions
     std::cout << "--------------------" << std::endl;
 
 
     //Problem physics stack
-    QuadratureRule<Nsd,Nne>            quadRule = Quadrature<Nsd,Nne>::gauss_legendre(quadOrder); //get the quadrature points and weights for the specified quadrature order
-    StVenantKirchhoff<Nsd,Nne>         material(lambda, mu, alpha_C, alpha_T); //create an instance of the St. Venant-Kirchhoff material model with the specified Lamé parameters
-    ElementEvaluator<Nsd,Nne,BfOrder>  elemEval(mesh, material, quadRule); //create an instance of element evaluator with the mesh, material model, and quadrature rule
+    QuadratureRule<Nsd,Nne>             quadRule = Quadrature<Nsd,Nne>::gauss_legendre(quadOrder); //get the quadrature points and weights for the specified quadrature order
+    StVenantKirchhoff<Nsd,Nne>          material(lambda, mu, alpha_C, alpha_T); //create an instance of the St. Venant-Kirchhoff material model with the specified Lamé parameters
+    ElementEvaluator<Nsd,Nne,BfOrder>   elemEval(mesh, material, quadRule); //create an instance of element evaluator with the mesh, material model, and quadrature rule
     DiffusionEvaluator<Nsd,Nne,BfOrder> diffEval(mesh, quadRule, DC, DT, alpha_C, alpha_T, lambda, mu); //create an instance of diffusion evaluator with the mesh, quadrature rule, diffusion coefficients, expansion coefficients, and Lamé parameters
-    Assembler<Nsd,Nne,BfOrder>         assembler(mesh, elemEval, diffEval); //create an instance of the assembler with the mesh and element evaluator
-    OutputWriter<Nsd, Nne>             writer("solutions"); //create an instance of the output writer to write results to the "output" directory
+    Assembler<Nsd,Nne,BfOrder>          assembler(mesh, elemEval, diffEval); //create an instance of the assembler with the mesh and element evaluator
+    OutputWriter<Nsd, Nne>              writer("solutions"); //create an instance of the output writer to write results to the "output" directory
 
-    NonlinearSolver<Nsd,Nne,BfOrder>   solver(tol, maxIncr, maxIter); //create an instance of the nonlinear solver with a tolerance of 1e-6, maximum 10 increments, and maximum 20 iterations per increment
+    NonlinearSolver<Nsd,Nne,BfOrder>   solver(tol, maxIncr, maxIter, maxTimeSteps); //create an instance of the nonlinear solver with a tolerance of 1e-6, maximum 10 increments, and maximum 20 iterations per increment
 
     Eigen::VectorXd u = Eigen::VectorXd::Zero(mesh.Nnodes()*Nsd); //initialize the global displacement vector to zero
     Eigen::VectorXd C = Eigen::VectorXd::Zero(mesh.Nnodes()); //initialize the global chemical concentration vector to zero
@@ -131,13 +135,15 @@ int main(){
 
     std::cout << "Starting nonlinear solve..." << std::endl;
     std::cout << "--------------------" << std::endl;
-    solver.solve(u, C, T, assembler, bcs,
+    solver.solve(u, C, T, dt, assembler, bcs, bcs_C, bcs_T,
         [&](unsigned int incr, unsigned int iter, double residualNorm){
             writer.sendResidual(incr, iter, residualNorm); //send the residual norm to the output writer for visualization
             
             if(iter == 0){ //write the solution at the first iteration of each increment
-                writer.writeVTU(mesh, u, incr); //write the current solution vector and mesh information to files for visualization
+                writer.writeVTU(mesh, u, C, T, incr); //write the current solution vector and mesh information to files for visualization
             }
+
+
         }
     ); //solve the nonlinear system to get the nodal displacements
     std::cout << "--------------------" << std::endl;

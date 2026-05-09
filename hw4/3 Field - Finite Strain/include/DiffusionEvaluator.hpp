@@ -4,7 +4,6 @@
 #include "Mesh.hpp"
 #include "ShapeFunction.hpp"
 #include "Quadrature.hpp"
-#include "MaterialModel.hpp"
 
 template <unsigned int Nsd, unsigned int Nne, unsigned int BfOrder>
 class DiffusionEvaluator{

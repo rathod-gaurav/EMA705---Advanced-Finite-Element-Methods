@@ -101,7 +101,7 @@ void ElementEvaluator<Nsd,Nne,BfOrder>::computeElement(
 
     MatrixNsd S = MatrixNsd::Zero(); //Second Piola-Kirchhoff stress tensor
     MatrixNsd P = MatrixNsd::Zero(); //First Piola-Kirchhoff stress tensor
-    Eigen::MatrixXd C_mat = Eigen::MatrixXd::Zero(9,9); //material tangent stiffness matrix in Voigt notation (3x3 block for each pair of nodes)
+    Eigen::MatrixXd C_mat = Eigen::MatrixXd::Zero(Nsd*Nsd,Nsd*Nsd); //material tangent stiffness matrix in Voigt notation (3x3 block for each pair of nodes)
     material_.computeCmat(C_mat); //compute the material tangent stiffness matrix using the material model
 
     //Gaussian quadrature loop
@@ -175,7 +175,7 @@ void ElementEvaluator<Nsd,Nne,BfOrder>::computeElement(
                                     for(int Q = 0; Q < Nsd; Q++){
                                         for(int M = 0; M < Nsd; M++){
                                             for(int N = 0; N < Nsd; N++){
-                                                double C_PQMN = C_mat(3*P + Q, 3*M + N); //material tangent stiffness in Voigt notation
+                                                double C_PQMN = C_mat(Nsd*P + Q, Nsd*M + N); //material tangent stiffness in Voigt notation
                                                 val += F(i,P)*C_PQMN*F(j,M)*dNA_dx(Q)*dNB_dx(N);
                                             }
                                         }
@@ -215,7 +215,16 @@ void ElementEvaluator<Nsd,Nne,BfOrder>::computeElement(
                     MatrixNsd grad_u = computeGradU(u_e, xi_vec, JacInv); //compute the gradient of the displacement field at the quadrature point
                     MatrixNsd F = MatrixNsd::Identity() + grad_u; //deformation gradient
 
-                    material_.compute(F, S, P, C_mat); //compute the stress tensors E,S,P and material tangent stiffness matrix at the quadrature point using the material model
+                    //calculate C_val and T_val at the quadrature point using shape functions and nodal values
+                    double C_val = 0.0;
+                    double T_val = 0.0;
+                    for (int A = 0; A < Nne; A++){
+                        double N_A = ShapeFunction<Nsd,Nne,BfOrder>::basis_function(A, xi_vec);
+                        C_val += N_A * C_e(A); //interpolate chemical concentration at the quadrature point
+                        T_val += N_A * T_e(A); //interpolate temperature at the quadrature point
+                    }
+
+                    material_.compute(F, C_val, T_val, S, P); //compute the stress tensors E,S,P and material tangent stiffness matrix at the quadrature point using the material model
                     
                     for(int B = 0 ; B < Nne ; B++){//Loop to calculate Residual
                         VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne,BfOrder>::basis_gradient(B, xi_vec);
@@ -253,7 +262,7 @@ void ElementEvaluator<Nsd,Nne,BfOrder>::computeElement(
                                         for(int Q = 0; Q < Nsd; Q++){
                                             for(int M = 0; M < Nsd; M++){
                                                 for(int N = 0; N < Nsd; N++){
-                                                    double C_PQMN = C_mat(3*P + Q, 3*M + N); //material tangent stiffness in Voigt notation
+                                                    double C_PQMN = C_mat(Nsd*P + Q, Nsd*M + N); //material tangent stiffness in Voigt notation
                                                     val += F(i,P)*C_PQMN*F(j,M)*dNA_dx(Q)*dNB_dx(N);
                                                 }
                                             }
@@ -298,7 +307,16 @@ void ElementEvaluator<Nsd,Nne,BfOrder>::computeElement(
                     MatrixNsd grad_u = computeGradU(u_e, xi_vec, JacInv); //compute the gradient of the displacement field at the quadrature point
                     MatrixNsd F = MatrixNsd::Identity() + grad_u; //deformation gradient
 
-                    material_.compute(F, S, P, C_mat); //compute the stress tensors E,S,P and material tangent stiffness matrix at the quadrature point using the material model
+                    //calculate C_val and T_val at the quadrature point using shape functions and nodal values
+                    double C_val = 0.0;
+                    double T_val = 0.0;
+                    for (int A = 0; A < Nne; A++){
+                        double N_A = ShapeFunction<Nsd,Nne,BfOrder>::basis_function(A, xi_vec);
+                        C_val += N_A * C_e(A); //interpolate chemical concentration at the quadrature point
+                        T_val += N_A * T_e(A); //interpolate temperature at the quadrature point
+                    }
+
+                    material_.compute(F, C_val, T_val, S, P); //compute the stress tensors E,S,P and material tangent stiffness matrix at the quadrature point using the material model
                     
                     
                     for(int B = 0 ; B < Nne ; B++){//Loop to calculate Residual
@@ -337,7 +355,7 @@ void ElementEvaluator<Nsd,Nne,BfOrder>::computeElement(
                                         for(int Q = 0; Q < Nsd; Q++){
                                             for(int M = 0; M < Nsd; M++){
                                                 for(int N = 0; N < Nsd; N++){
-                                                    double C_PQMN = C_mat(3*P + Q, 3*M + N); //material tangent stiffness in Voigt notation
+                                                    double C_PQMN = C_mat(Nsd*P + Q, Nsd*M + N); //material tangent stiffness in Voigt notation
                                                     val += F(i,P)*C_PQMN*F(j,M)*dNA_dx(Q)*dNB_dx(N);
                                                 }
                                             }

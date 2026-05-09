@@ -6,6 +6,8 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
   /home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/Assembler.tpp \
   /home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/BoundaryConditions.hpp \
   /home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/BoundaryConditions.tpp \
+  /home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/BoundaryConditionsScalar.hpp \
+  /home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/BoundaryConditionsScalar.tpp \
   /home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/DiffusionEvaluator.hpp \
   /home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/DiffusionEvaluator.tpp \
   /home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/ElementEvaluator.hpp \
@@ -1013,6 +1015,10 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
 
 /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h:
 
+/usr/include/x86_64-linux-gnu/bits/socket.h:
+
+/usr/include/x86_64-linux-gnu/bits/long-double.h:
+
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/SVD/InternalHeaderCheck.h:
 
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/QR/FullPivHouseholderQR.h:
@@ -1129,12 +1135,6 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
 
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/SparseCore/SparsePermutation.h:
 
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/products/TriangularMatrixMatrix.h:
-
-/usr/include/c++/13/bits/requires_hosted.h:
-
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/SparseCore/SparseAssign.h:
-
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/functors/BinaryFunctors.h:
 
 /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h:
@@ -1145,9 +1145,9 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
 
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/util/IntegralConstant.h:
 
-/home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/BoundaryConditions.tpp:
-
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/LU/PartialPivLU.h:
+
+/home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/BoundaryConditions.tpp:
 
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/arch/SSE/PacketMath.h:
 
@@ -1180,6 +1180,12 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/Select.h:
 
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/arch/SSE/Reductions.h:
+
+/usr/include/x86_64-linux-gnu/bits/posix1_lim.h:
+
+/usr/include/x86_64-linux-gnu/bits/locale.h:
+
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/arch/Default/GenericPacketMathFunctionsFwd.h:
 
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/arch/AVX/TypeCasting.h:
 
@@ -1240,16 +1246,6 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
 /usr/lib/gcc/x86_64-linux-gnu/13/include/mm_malloc.h:
 
 /usr/include/c++/13/algorithm:
-
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/util/Macros.h:
-
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/SparseLU/SparseLU_panel_dfs.h:
-
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/DenseCoeffsBase.h:
-
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/plugins/MatrixCwiseBinaryOps.inc:
-
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/Block.h:
 
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/IterativeLinearSolvers:
 
@@ -1321,29 +1317,17 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
 
 /usr/include/c++/13/bits/stl_numeric.h:
 
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/util/SymbolicIndex.h:
+/usr/include/c++/13/bits/exception.h:
 
-/home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/Quadrature.tpp:
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Geometry/Rotation2D.h:
 
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Geometry/Scaling.h:
+/usr/lib/gcc/x86_64-linux-gnu/13/include/avx512ifmavlintrin.h:
 
-/home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/ShapeFunction.hpp:
+/home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/DiffusionEvaluator.hpp:
 
-/usr/lib/gcc/x86_64-linux-gnu/13/include/avx512dqintrin.h:
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/RealView.h:
 
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Cholesky/LDLT.h:
-
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/util/StaticAssert.h:
-
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Geometry/Translation.h:
-
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Eigenvalues/EigenSolver.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/13/include/pmmintrin.h:
-
-/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:
-
-/home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/DiffusionEvaluator.tpp:
+/usr/include/locale.h:
 
 /usr/include/c++/13/chrono:
 
@@ -1369,17 +1353,7 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
 
 /usr/include/c++/13/bits/parse_numbers.h:
 
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/IterativeLinearSolvers/ConjugateGradient.h:
-
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Jacobi/InternalHeaderCheck.h:
-
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/functors/TernaryFunctors.h:
-
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/util/Meta.h:
-
-/usr/include/c++/13/clocale:
-
-/usr/include/c++/13/stdexcept:
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Eigenvalues/EigenSolver.h:
 
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/plugins/ReshapedMethods.inc:
 
@@ -1387,11 +1361,11 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
 
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/LU/FullPivLU.h:
 
-/usr/lib/gcc/x86_64-linux-gnu/13/include/avx512ifmavlintrin.h:
+/usr/include/c++/13/bits/stl_construct.h:
 
-/home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/DiffusionEvaluator.hpp:
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/GlobalFunctions.h:
 
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Geometry/Rotation2D.h:
+/usr/include/c++/13/bits/shared_ptr.h:
 
 /home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/Mesh.hpp:
 
@@ -1427,19 +1401,13 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
 
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/LU/arch/InverseSize4.h:
 
-/home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/Assembler.tpp:
-
 /home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/main.cpp:
 
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/GlobalFunctions.h:
+/home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/BoundaryConditionsScalar.tpp:
 
-/usr/include/c++/13/bits/shared_ptr.h:
+/usr/include/asm-generic/errno-base.h:
 
-/usr/include/c++/13/bits/stl_construct.h:
-
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/RealView.h:
-
-/usr/include/locale.h:
+/usr/include/c++/13/bits/stl_iterator_base_funcs.h:
 
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/IterativeLinearSolvers/BiCGSTAB.h:
 
@@ -1451,7 +1419,53 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
 
 /home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/StVenantKirchhoff.tpp:
 
+/home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/Assembler.tpp:
+
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/DenseBase.h:
+
+/usr/include/x86_64-linux-gnu/bits/floatn.h:
+
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/IterativeLinearSolvers/ConjugateGradient.h:
+
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Jacobi/InternalHeaderCheck.h:
+
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/functors/TernaryFunctors.h:
+
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/util/Meta.h:
+
+/usr/include/c++/13/clocale:
+
+/usr/include/c++/13/stdexcept:
+
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Geometry/Scaling.h:
+
+/home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/ShapeFunction.hpp:
+
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/util/SymbolicIndex.h:
+
+/home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/Quadrature.tpp:
+
+/usr/lib/gcc/x86_64-linux-gnu/13/include/avx512dqintrin.h:
+
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Cholesky/LDLT.h:
+
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/util/StaticAssert.h:
+
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Geometry/Translation.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/13/include/pmmintrin.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:
+
+/home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/DiffusionEvaluator.tpp:
+
 /usr/include/time.h:
+
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/SparseLU/SparseLU_panel_dfs.h:
+
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/DenseCoeffsBase.h:
+
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/util/Macros.h:
 
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/SolverBase.h:
 
@@ -1491,9 +1505,9 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
 
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/PartialReduxEvaluator.h:
 
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/DenseBase.h:
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/plugins/MatrixCwiseBinaryOps.inc:
 
-/usr/include/x86_64-linux-gnu/bits/floatn.h:
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/Block.h:
 
 /usr/include/x86_64-linux-gnu/bits/time.h:
 
@@ -1591,9 +1605,9 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
 
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/Random.h:
 
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Eigenvalues/Tridiagonalization.h:
-
 /usr/include/c++/13/string:
+
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Eigenvalues/Tridiagonalization.h:
 
 /usr/include/features.h:
 
@@ -1619,6 +1633,10 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
 
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/InternalHeaderCheck.h:
 
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/Transpose.h:
+
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/SkewSymmetricMatrix3.h:
+
 /usr/include/x86_64-linux-gnu/bits/types/clock_t.h:
 
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/util/Memory.h:
@@ -1634,12 +1652,6 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/SparseCholesky/SimplicialCholesky.h:
 
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/Fill.h:
-
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/SkewSymmetricMatrix3.h:
-
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/Transpose.h:
-
-/usr/include/c++/13/bits/exception.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/13/include/lzcntintrin.h:
 
@@ -1737,6 +1749,12 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
 
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/Stride.h:
 
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/products/TriangularMatrixMatrix.h:
+
+/usr/include/c++/13/bits/requires_hosted.h:
+
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/SparseCore/SparseAssign.h:
+
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/SparseCore/SparseColEtree.h:
 
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Eigenvalues/HessenbergDecomposition.h:
@@ -1760,10 +1778,6 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Eigenvalues/RealSchur.h:
 
 /usr/include/c++/13/bits/algorithmfwd.h:
-
-/usr/include/x86_64-linux-gnu/bits/socket.h:
-
-/usr/include/x86_64-linux-gnu/bits/long-double.h:
 
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/SparseCore/SparseProduct.h:
 
@@ -1865,10 +1879,6 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
 
 /usr/include/asm-generic/bitsperlong.h:
 
-/usr/include/asm-generic/errno-base.h:
-
-/usr/include/c++/13/bits/stl_iterator_base_funcs.h:
-
 /usr/include/x86_64-linux-gnu/sys/types.h:
 
 /usr/include/asm-generic/socket.h:
@@ -1896,6 +1906,8 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
 /usr/include/c++/13/unordered_map:
 
 /usr/include/c++/13/bits/atomic_base.h:
+
+/home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/BoundaryConditionsScalar.hpp:
 
 /usr/include/c++/13/bits/basic_ios.h:
 
@@ -2193,9 +2205,9 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
 
 /usr/include/c++/13/ratio:
 
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/CommaInitializer.h:
-
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/Eigenvalues:
+
+/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/CommaInitializer.h:
 
 /usr/include/linux/limits.h:
 
@@ -2262,9 +2274,3 @@ CMakeFiles/main.dir/main.cpp.o: /home/grathod/Downloads/Spring26/EMA705/hw4/3\ F
 /home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/products/GeneralBlockPanelKernel.h:
 
 /usr/include/x86_64-linux-gnu/bits/fp-logb.h:
-
-/usr/include/x86_64-linux-gnu/bits/posix1_lim.h:
-
-/home/grathod/Downloads/eigen-5.0.0/eigen-5.0.0/Eigen/src/Core/arch/Default/GenericPacketMathFunctionsFwd.h:
-
-/usr/include/x86_64-linux-gnu/bits/locale.h:

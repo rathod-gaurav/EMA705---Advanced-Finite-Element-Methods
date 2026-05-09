@@ -154,20 +154,20 @@ void Assembler<Nsd,Nne,BfOrder>::assembleDiffusionSystem(
             for(int B = 0; B < Nne ; B++)
             {
                 int Bglobal = mesh_.elements[e].node[B];
+
+                MCC_triplets.emplace_back(Aglobal, Bglobal, MCClocal(A, B));
+                KCC_triplets.emplace_back(Aglobal, Bglobal, KCClocal(A, B));
+                KCT_triplets.emplace_back(Aglobal, Bglobal, KCTlocal(A, B));
+
+                MTT_triplets.emplace_back(Aglobal, Bglobal, MTTlocal(A, B));
+                KTT_triplets.emplace_back(Aglobal, Bglobal, KTTlocal(A, B));
+                KTC_triplets.emplace_back(Aglobal, Bglobal, KTClocal(A, B));
+                
                 for(int i = 0 ; i < Nsd ; i++){
-                    for(int j = 0 ; j < Nsd ; j++){
-                        MCC_triplets.emplace_back(Aglobal + i, Bglobal + j, MCClocal(A + i, B + j));
-                        KCC_triplets.emplace_back(Aglobal + i, Bglobal + j, KCClocal(A + i, B + j));
-                        KCT_triplets.emplace_back(Aglobal + i, Bglobal + j, KCTlocal(A + i, B + j));
-
-                        MTT_triplets.emplace_back(Aglobal + i, Bglobal + j, MTTlocal(A + i, B + j));
-                        KTT_triplets.emplace_back(Aglobal + i, Bglobal + j, KTTlocal(A + i, B + j));
-                        KTC_triplets.emplace_back(Aglobal + i, Bglobal + j, KTClocal(A + i, B + j));
-
-                        KuC_triplets.emplace_back(Nsd*Aglobal + i, Bglobal + j, KuClocal(Nsd*A + i, B + j));
-                        KuT_triplets.emplace_back(Nsd*Aglobal + i, Bglobal + j, KuTlocal(Nsd*A + i, B + j));
-                    }
+                    KuC_triplets.emplace_back(Nsd*Aglobal + i, Bglobal, KuClocal(Nsd*A + i, B));
+                    KuT_triplets.emplace_back(Nsd*Aglobal + i, Bglobal, KuTlocal(Nsd*A + i, B));
                 }
+
             }
             // std::cout << "Assembled diffusion for element " << e+1 << "/" << Nel_t << std::endl;
         }
