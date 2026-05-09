@@ -15,8 +15,7 @@ void StVenantKirchhoff<Nsd,Nne>::compute(
     const double& C_val, //chemical concentration
     const double& T_val, //temperature
     MatrixNsd& S, //second Piola-Kirchhoff stress tensor
-    MatrixNsd& P, //first Piola-Kirchhoff stress tensor
-    Eigen::MatrixXd& C_mat
+    MatrixNsd& P //first Piola-Kirchhoff stress tensor
 ) const {
 
     MatrixNsd F_th = MatrixNsd::Identity() + alpha_T_*T_val; //thermal expansion deformation gradient
@@ -30,8 +29,13 @@ void StVenantKirchhoff<Nsd,Nne>::compute(
     S = F_th.inverse().transpose() * F_ch.inverse().transpose() * S_el * F_ch.inverse() * F_th.inverse(); //total second Piola-Kirchhoff stress
 
     P = F*S; //total first Piola-Kirchhoff stress
+}
 
-    C_mat = Eigen::MatrixXd::Zero(9,9); //material tangent stiffness matrix (4th order elasticity tensor in Voigt notation)
+template<unsigned int Nsd, unsigned int Nne>
+void StVenantKirchhoff<Nsd,Nne>::computeCmat(
+    Eigen::MatrixXd& C_mat //material tangent stiffness matrix (4th order elasticity tensor in Voigt notation)
+) const {
+    // C_mat = Eigen::MatrixXd::Zero(9,9); //material tangent stiffness matrix (4th order elasticity tensor in Voigt notation)
     for(int P = 0; P < 3; P++){
         for(int Q = 0; Q < 3; Q++){
             for(int M = 0; M < 3; M++){
@@ -43,3 +47,5 @@ void StVenantKirchhoff<Nsd,Nne>::compute(
         }
     }
 }
+
+

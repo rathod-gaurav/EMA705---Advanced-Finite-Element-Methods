@@ -102,6 +102,7 @@ void ElementEvaluator<Nsd,Nne,BfOrder>::computeElement(
     MatrixNsd S = MatrixNsd::Zero(); //Second Piola-Kirchhoff stress tensor
     MatrixNsd P = MatrixNsd::Zero(); //First Piola-Kirchhoff stress tensor
     Eigen::MatrixXd C_mat = Eigen::MatrixXd::Zero(9,9); //material tangent stiffness matrix in Voigt notation (3x3 block for each pair of nodes)
+    material_.computeCmat(C_mat); //compute the material tangent stiffness matrix using the material model
 
     //Gaussian quadrature loop
     if constexpr (Nsd == 2){
@@ -136,7 +137,7 @@ void ElementEvaluator<Nsd,Nne,BfOrder>::computeElement(
                     T_val += N_A * T_e(A); //interpolate temperature at the quadrature point
                 }
 
-                material_.compute(F, C_val, T_val, S, P, C_mat); //compute the stress tensors E,S,P and material tangent stiffness matrix at the quadrature point using the material model
+                material_.compute(F, C_val, T_val, S, P); //compute the stress tensors E,S,P and material tangent stiffness matrix at the quadrature point using the material model
                 
                 for(int B = 0 ; B < Nne ; B++){//Loop to calculate Residual
                     VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne,BfOrder>::basis_gradient(B, xi_vec);
@@ -148,14 +149,14 @@ void ElementEvaluator<Nsd,Nne,BfOrder>::computeElement(
                 // cout << "Calculated Rlocal for element " << e+1 << "/" << Nel_t << "\r";
                 
                 for(int A = 0 ; A < Nne ; A++){//Loops to calculate tangent matrix
-                    VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne,BfOrder>::basis_gradient(A, xi_vec);
-                    VectorNsd dNA_dx = JacInv.transpose()*basis_gradient_vec;
+                    VectorNsd basis_gradient_vecA = ShapeFunction<Nsd,Nne,BfOrder>::basis_gradient(A, xi_vec);
+                    VectorNsd dNA_dx = JacInv.transpose()*basis_gradient_vecA;
                     
                     
                     
                     for(int B = 0 ; B < Nne ; B++){
-                        VectorNsd basis_gradient_vec = ShapeFunction<Nsd,Nne,BfOrder>::basis_gradient(B, xi_vec);
-                        VectorNsd dNB_dx = JacInv.transpose()*basis_gradient_vec;
+                        VectorNsd basis_gradient_vecB = ShapeFunction<Nsd,Nne,BfOrder>::basis_gradient(B, xi_vec);
+                        VectorNsd dNB_dx = JacInv.transpose()*basis_gradient_vecB;
                         
 
                         //Kgeometric

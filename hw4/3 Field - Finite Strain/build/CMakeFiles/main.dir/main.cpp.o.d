@@ -584,6 +584,8 @@ CMakeFiles/main.dir/main.cpp.o: \
  /home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/ShapeFunction.tpp \
  /home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/MaterialModel.hpp \
  /home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/ElementEvaluator.tpp \
+ /home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/DiffusionEvaluator.hpp \
+ /home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/DiffusionEvaluator.tpp \
  /home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/StVenantKirchhoff.hpp \
  /home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/StVenantKirchhoff.tpp \
  /home/grathod/Downloads/Spring26/EMA705/hw4/3\ Field\ -\ Finite\ Strain/include/Assembler.hpp \

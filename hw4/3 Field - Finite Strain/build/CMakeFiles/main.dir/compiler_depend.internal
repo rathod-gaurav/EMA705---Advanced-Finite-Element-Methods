@@ -7,6 +7,8 @@ CMakeFiles/main.dir/main.cpp.o
  /home/grathod/Downloads/Spring26/EMA705/hw4/3 Field - Finite Strain/include/Assembler.tpp
  /home/grathod/Downloads/Spring26/EMA705/hw4/3 Field - Finite Strain/include/BoundaryConditions.hpp
  /home/grathod/Downloads/Spring26/EMA705/hw4/3 Field - Finite Strain/include/BoundaryConditions.tpp
+ /home/grathod/Downloads/Spring26/EMA705/hw4/3 Field - Finite Strain/include/DiffusionEvaluator.hpp
+ /home/grathod/Downloads/Spring26/EMA705/hw4/3 Field - Finite Strain/include/DiffusionEvaluator.tpp
  /home/grathod/Downloads/Spring26/EMA705/hw4/3 Field - Finite Strain/include/ElementEvaluator.hpp
  /home/grathod/Downloads/Spring26/EMA705/hw4/3 Field - Finite Strain/include/ElementEvaluator.tpp
  /home/grathod/Downloads/Spring26/EMA705/hw4/3 Field - Finite Strain/include/MaterialModel.hpp

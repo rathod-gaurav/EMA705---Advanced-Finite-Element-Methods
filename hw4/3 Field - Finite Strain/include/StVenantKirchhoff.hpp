@@ -14,7 +14,10 @@ class StVenantKirchhoff : public MaterialModel<Nsd,Nne>{ //derived from Material
             const double& C_val, //chemical concentration
             const double& T_val, //temperature
             MatrixNsd& S, //second Piola-Kirchhoff stress tensor
-            MatrixNsd& P, //first Piola-Kirchhoff stress tensor
+            MatrixNsd& P //first Piola-Kirchhoff stress tensor
+        ) const override; //override the pure virtual function from MaterialModel class
+
+        void computeCmat(
             Eigen::MatrixXd& C_mat //material tangent stiffness matrix (4th order elasticity tensor in Voigt notation)
         ) const override; //override the pure virtual function from MaterialModel class
 

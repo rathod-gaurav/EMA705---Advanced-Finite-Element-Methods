@@ -3,6 +3,7 @@
 #include "Quadrature.hpp"
 #include "BoundaryConditions.hpp"
 #include "ElementEvaluator.hpp"
+#include "DiffusionEvaluator.hpp"
 #include "StVenantKirchhoff.hpp"
 #include "Assembler.hpp"
 #include "NonLinearSolver.hpp"
@@ -29,12 +30,14 @@ int main(){
     unsigned int quadOrder = 1; //number of quadrature points in each direction for
 
     //Problem parameters
-    double E = 1.0; //Young's modulus
+    double E = 1.0; //Young's modulus //N/m2
     double nu = 0.3; //Poisson's ratio
     double lambda = E*nu / ((1.0 + nu) * (1.0 - 2.0 * nu)); //first Lamé parameter
     double mu = E / (2.0 * (1.0 + nu)); //second Lamé parameter (shear modulus)
     Eigen::Matrix<double, Nsd, Nsd> alpha_C = 0.005 * Eigen::Matrix<double, Nsd, Nsd>::Identity(); //coefficient for chemical expansion
     Eigen::Matrix<double, Nsd, Nsd> alpha_T = 0.01 * Eigen::Matrix<double, Nsd, Nsd>::Identity(); //coefficient for thermal expansion
+    double DC = 1.0; //chemical diffusivity m2/s
+    double DT = 1.0; //thermal conductivity W/mK
 
     //Solver parameters
     double tol = 1e-6; //tolerance for convergence of the nonlinear solver
@@ -116,6 +119,7 @@ int main(){
     QuadratureRule<Nsd,Nne>            quadRule = Quadrature<Nsd,Nne>::gauss_legendre(quadOrder); //get the quadrature points and weights for the specified quadrature order
     StVenantKirchhoff<Nsd,Nne>         material(lambda, mu, alpha_C, alpha_T); //create an instance of the St. Venant-Kirchhoff material model with the specified Lamé parameters
     ElementEvaluator<Nsd,Nne,BfOrder>  elemEval(mesh, material, quadRule); //create an instance of element evaluator with the mesh, material model, and quadrature rule
+    DiffusionEvaluator<Nsd,Nne,BfOrder> diffEval(mesh, quadRule, DC, DT, alpha_C, alpha_T, lambda, mu); //create an instance of diffusion evaluator with the mesh, quadrature rule, diffusion coefficients, expansion coefficients, and Lamé parameters
     Assembler<Nsd,Nne,BfOrder>         assembler(mesh, elemEval); //create an instance of the assembler with the mesh and element evaluator
     OutputWriter<Nsd, Nne>             writer("solutions"); //create an instance of the output writer to write results to the "output" directory
 
