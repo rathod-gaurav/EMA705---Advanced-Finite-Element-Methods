@@ -10,7 +10,7 @@
 template <unsigned int Nsd, unsigned int Nne, unsigned int BfOrder>
 class Assembler{
     public: 
-        Assembler(const Mesh<Nsd,Nne>& mesh, const ElementEvaluator<Nsd,Nne,BfOrder>& elem_evaluator);
+        Assembler(const Mesh<Nsd,Nne>& mesh, const ElementEvaluator<Nsd,Nne,BfOrder>& elem_evaluator, const DiffusionEvaluator<Nsd,Nne,BfOrder>& diffusion_evaluator); //constructor to initialize the assembler with the mesh, element evaluator, and diffusion evaluator
 
         void assembleSystem(
             const Eigen::VectorXd& u, //global nodal displacement vector (Nnodes*Nsd x 1 vector)
@@ -18,6 +18,19 @@ class Assembler{
             const Eigen::VectorXd& T, //global nodal temperature vector (Nnodes x 1 vector)
             Eigen::SparseMatrix<double>& Kglobal, //global stiffness matrix (Nnodes*Nsd x Nnodes*Nsd sparse matrix)
             Eigen::VectorXd& Rglobal //global internal force vector (Nnodes*Nsd x 1 vector)
+        ) const;
+
+        void assembleDiffusionSystem(
+            Eigen::SparseMatrix<double>& MCCglobal, //global chemical mass matrix (Nnodes x Nnodes sparse matrix) 
+            Eigen::SparseMatrix<double>& KCCglobal, //global chemical stiffness matrix (Nnodes x Nnodes sparse matrix)
+            Eigen::SparseMatrix<double>& KCTglobal, //global coupling stiffness matrix between chemical concentration and temperature (Nnodes x Nnodes sparse matrix)
+
+            Eigen::SparseMatrix<double>& MTTglobal, //global thermal mass matrix (Nnodes x Nnodes sparse matrix)
+            Eigen::SparseMatrix<double>& KTTglobal, //global thermal stiffness matrix (Nnodes x Nnodes sparse matrix)
+            Eigen::SparseMatrix<double>& KTCglobal, //global coupling stiffness matrix between temperature and chemical concentration (Nnodes x Nnodes sparse matrix)
+
+            Eigen::SparseMatrix<double>& KuCglobal, //global coupling stiffness matrix between displacement and chemical concentration (Nnodes*Nsd x Nnodes sparse matrix)
+            Eigen::SparseMatrix<double>& KuTglobal //global coupling stiffness matrix between displacement and temperature (Nnodes*Nsd x Nnodes sparse matrix)
         ) const;
 
         void partition(
@@ -38,6 +51,7 @@ class Assembler{
     
         const Mesh<Nsd,Nne>& mesh_; //reference to the mesh object
         const ElementEvaluator<Nsd,Nne,BfOrder>& elem_evaluator_; //reference to the element evaluator object
+        const DiffusionEvaluator<Nsd,Nne,BfOrder>& diffusion_evaluator_; //reference to the diffusion evaluator object
 
 
 };

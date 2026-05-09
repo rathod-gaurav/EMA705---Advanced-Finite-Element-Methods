@@ -120,7 +120,7 @@ int main(){
     StVenantKirchhoff<Nsd,Nne>         material(lambda, mu, alpha_C, alpha_T); //create an instance of the St. Venant-Kirchhoff material model with the specified Lamé parameters
     ElementEvaluator<Nsd,Nne,BfOrder>  elemEval(mesh, material, quadRule); //create an instance of element evaluator with the mesh, material model, and quadrature rule
     DiffusionEvaluator<Nsd,Nne,BfOrder> diffEval(mesh, quadRule, DC, DT, alpha_C, alpha_T, lambda, mu); //create an instance of diffusion evaluator with the mesh, quadrature rule, diffusion coefficients, expansion coefficients, and Lamé parameters
-    Assembler<Nsd,Nne,BfOrder>         assembler(mesh, elemEval); //create an instance of the assembler with the mesh and element evaluator
+    Assembler<Nsd,Nne,BfOrder>         assembler(mesh, elemEval, diffEval); //create an instance of the assembler with the mesh and element evaluator
     OutputWriter<Nsd, Nne>             writer("solutions"); //create an instance of the output writer to write results to the "output" directory
 
     NonlinearSolver<Nsd,Nne,BfOrder>   solver(tol, maxIncr, maxIter); //create an instance of the nonlinear solver with a tolerance of 1e-6, maximum 10 increments, and maximum 20 iterations per increment

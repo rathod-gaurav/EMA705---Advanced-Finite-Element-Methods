@@ -74,20 +74,6 @@ void DiffusionEvaluator<Nsd,Nne,BfOrder>::computeDiffusionMatrices(
     Eigen::MatrixXd& KuClocal, //terms from mechanics weak coupling (Nne*Nsd x Nne  matrix)
     Eigen::MatrixXd& KuTlocal //(Nne*Nsd x Nne  matrix)
 ) const {
-    MCClocal = Eigen::MatrixXd::Zero(Nne,Nne);
-    KCClocal = Eigen::MatrixXd::Zero(Nne,Nne);
-    KCTlocal = Eigen::MatrixXd::Zero(Nne,Nne);
-
-    MTTlocal = Eigen::MatrixXd::Zero(Nne,Nne);
-    KTTlocal = Eigen::MatrixXd::Zero(Nne,Nne);
-    KTClocal = Eigen::MatrixXd::Zero(Nne,Nne);
-
-    KuClocal = Eigen::MatrixXd::Zero(Nne*Nsd,Nne);
-    KuTlocal = Eigen::MatrixXd::Zero(Nne*Nsd,Nne);
-
-    // Eigen::MatrixXd C_mat = Eigen::MatrixXd::Zero(9,9); //material tangent stiffness matrix in Voigt notation (3x3 block for each pair of nodes)
-    // material_.computeCmat(C_mat); //compute the material tangent stiffness matrix using the material model
-
     double alpha_tilde_CC = lambda_*alpha_C_.trace()*alpha_C_.trace() + 2*mu_*(alpha_C_*alpha_C_).trace();
     double alpha_tilde_CT = lambda_*alpha_C_.trace()*alpha_T_.trace() + 2*mu_*(alpha_C_*alpha_T_).trace();
     double alpha_tilde_TT = lambda_*alpha_T_.trace()*alpha_T_.trace() + 2*mu_*(alpha_T_*alpha_T_).trace();
